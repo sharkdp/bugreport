@@ -21,6 +21,7 @@
 // - command line arguments
 //
 
+use std::ffi::{OsStr, OsString};
 use sys_info::{os_release, os_type};
 
 #[derive(Debug)]
@@ -135,6 +136,42 @@ impl Collector for OperatingSystem {
     }
 }
 
+pub struct EnvironmentVariables {
+    list: Vec<OsString>,
+}
+
+impl EnvironmentVariables {
+    pub fn list<S: AsRef<OsStr>>(list: &[S]) -> Self {
+        Self {
+            list: list.iter().map(|s| s.as_ref().to_os_string()).collect(),
+        }
+    }
+}
+
+impl Collector for EnvironmentVariables {
+    fn description(&self) -> String {
+        "Environment variables".into()
+    }
+
+    fn collect(&mut self, _: &ReportInfo) -> Result<String> {
+        let mut result = String::from("```\n");
+
+        for var in &self.list {
+            let value =
+                std::env::var_os(&var).map(|value| format!("'{}'", value.to_string_lossy()));
+
+            result += &format!(
+                "{} = {}\n",
+                var.to_string_lossy(),
+                value.unwrap_or("<not set>".into())
+            );
+        }
+
+        result += "\n```";
+        Ok(result)
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -145,6 +182,7 @@ mod tests {
             .add(SoftwareVersion::new("0.17.1"))
             .add(OperatingSystem::new())
             .add(CommandLine::new())
+            .add(EnvironmentVariables::list(&["BAT_PAGER", "BAT_STYLE"]))
             .generate();
 
         println!("{}", "Report:");
