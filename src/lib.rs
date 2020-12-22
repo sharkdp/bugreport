@@ -21,9 +21,6 @@
 // - command line arguments
 //
 
-use std::ffi::{OsStr, OsString};
-use sys_info::{os_release, os_type};
-
 #[derive(Debug)]
 pub enum CollectionError {}
 
@@ -68,125 +65,120 @@ impl<'a> Report<'a> {
         }
         report
     }
+
+    pub fn print(&mut self) {
+        print!("{}", self.generate());
+    }
 }
 
-pub struct SoftwareVersion {
-    version: String,
-}
+pub mod collectors {
 
-impl SoftwareVersion {
-    pub fn new<S: AsRef<str>>(version: S) -> Self {
-        Self {
-            version: version.as_ref().into(),
+    use std::ffi::{OsStr, OsString};
+    use sys_info::{os_release, os_type};
+
+    use super::Collector;
+    use super::ReportInfo;
+    use super::Result;
+
+    pub struct SoftwareVersion {
+        version: String,
+    }
+
+    impl SoftwareVersion {
+        pub fn new<S: AsRef<str>>(version: S) -> Self {
+            Self {
+                version: version.as_ref().into(),
+            }
         }
     }
-}
 
-impl Collector for SoftwareVersion {
-    fn description(&self) -> String {
-        "Software version".into()
-    }
-
-    fn collect(&mut self, report_info: &ReportInfo) -> Result<String> {
-        Ok(format!("{} {}", report_info.app_name, self.version.clone()))
-    }
-}
-
-pub struct CommandLine {}
-
-impl CommandLine {
-    pub fn new() -> Self {
-        Self {}
-    }
-}
-
-impl Collector for CommandLine {
-    fn description(&self) -> String {
-        "Command-line arguments".into()
-    }
-
-    fn collect(&mut self, _: &ReportInfo) -> Result<String> {
-        let mut result = String::from("```\n");
-
-        for arg in std::env::args_os() {
-            result += arg.to_string_lossy().as_ref();
-            result += " ";
+    impl Collector for SoftwareVersion {
+        fn description(&self) -> String {
+            "Software version".into()
         }
 
-        result += "\n```";
-        Ok(result)
-    }
-}
-
-pub struct OperatingSystem {}
-
-impl OperatingSystem {
-    pub fn new() -> Self {
-        Self {}
-    }
-}
-
-impl Collector for OperatingSystem {
-    fn description(&self) -> String {
-        "Operating system".into()
-    }
-
-    fn collect(&mut self, _: &ReportInfo) -> Result<String> {
-        Ok(format!("{} {}", os_type().unwrap(), os_release().unwrap()))
-    }
-}
-
-pub struct EnvironmentVariables {
-    list: Vec<OsString>,
-}
-
-impl EnvironmentVariables {
-    pub fn list<S: AsRef<OsStr>>(list: &[S]) -> Self {
-        Self {
-            list: list.iter().map(|s| s.as_ref().to_os_string()).collect(),
+        fn collect(&mut self, report_info: &ReportInfo) -> Result<String> {
+            Ok(format!("{} {}", report_info.app_name, self.version.clone()))
         }
     }
-}
 
-impl Collector for EnvironmentVariables {
-    fn description(&self) -> String {
-        "Environment variables".into()
+    pub struct CommandLine {}
+
+    impl CommandLine {
+        pub fn new() -> Self {
+            Self {}
+        }
     }
 
-    fn collect(&mut self, _: &ReportInfo) -> Result<String> {
-        let mut result = String::from("```\n");
-
-        for var in &self.list {
-            let value =
-                std::env::var_os(&var).map(|value| format!("'{}'", value.to_string_lossy()));
-
-            result += &format!(
-                "{} = {}\n",
-                var.to_string_lossy(),
-                value.unwrap_or("<not set>".into())
-            );
+    impl Collector for CommandLine {
+        fn description(&self) -> String {
+            "Command-line arguments".into()
         }
 
-        result += "\n```";
-        Ok(result)
+        fn collect(&mut self, _: &ReportInfo) -> Result<String> {
+            let mut result = String::from("```\n");
+
+            for arg in std::env::args_os() {
+                result += arg.to_string_lossy().as_ref();
+                result += " ";
+            }
+
+            result += "\n```";
+            Ok(result)
+        }
     }
-}
 
-#[cfg(test)]
-mod tests {
-    use super::*;
+    pub struct OperatingSystem {}
 
-    #[test]
-    fn basic() {
-        let report = Report::new("bat")
-            .add(SoftwareVersion::new("0.17.1"))
-            .add(OperatingSystem::new())
-            .add(CommandLine::new())
-            .add(EnvironmentVariables::list(&["BAT_PAGER", "BAT_STYLE"]))
-            .generate();
+    impl OperatingSystem {
+        pub fn new() -> Self {
+            Self {}
+        }
+    }
 
-        println!("{}", "Report:");
-        println!("{}", report);
-        println!("{}", "===");
+    impl Collector for OperatingSystem {
+        fn description(&self) -> String {
+            "Operating system".into()
+        }
+
+        fn collect(&mut self, _: &ReportInfo) -> Result<String> {
+            Ok(format!("{} {}", os_type().unwrap(), os_release().unwrap()))
+        }
+    }
+
+    pub struct EnvironmentVariables {
+        list: Vec<OsString>,
+    }
+
+    impl EnvironmentVariables {
+        pub fn list<S: AsRef<OsStr>>(list: &[S]) -> Self {
+            Self {
+                list: list.iter().map(|s| s.as_ref().to_os_string()).collect(),
+            }
+        }
+    }
+
+    impl Collector for EnvironmentVariables {
+        fn description(&self) -> String {
+            "Environment variables".into()
+        }
+
+        fn collect(&mut self, _: &ReportInfo) -> Result<String> {
+            let mut result = String::from("```\n");
+
+            for var in &self.list {
+                let value =
+                    std::env::var_os(&var).map(|value| format!("'{}'", value.to_string_lossy()));
+
+                result += &format!(
+                    "{} = {}\n",
+                    var.to_string_lossy(),
+                    value.unwrap_or("<not set>".into())
+                );
+            }
+
+            result += "\n```";
+            Ok(result)
+        }
     }
 }
