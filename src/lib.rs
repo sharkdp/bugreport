@@ -48,7 +48,7 @@ impl<'a> Report<'a> {
         }
     }
 
-    pub fn add<C: Collector + 'static>(mut self, collector: C) -> Self {
+    pub fn info<C: Collector + 'static>(mut self, collector: C) -> Self {
         self.collectors.push(Box::new(collector));
         self
     }
@@ -173,7 +173,7 @@ pub mod collectors {
                 result += &format!(
                     "{} = {}\n",
                     var.to_string_lossy(),
-                    value.unwrap_or("<not set>".into())
+                    value.unwrap_or_else(|| "<not set>".into())
                 );
             }
 
