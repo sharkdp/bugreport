@@ -1,0 +1,8 @@
+[package]
+name = "sys-info-collector"
+version = "0.1.0"
+authors = ["David Peter <mail@david-peter.de>"]
+edition = "2018"
+
+[dependencies]
+sys-info = "0.7.0"
