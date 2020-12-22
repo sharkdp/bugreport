@@ -32,7 +32,7 @@ pub trait Collector {
 }
 
 pub struct ReportInfo<'a> {
-    app_name: &'a str,
+    app_name: Option<&'a str>,
 }
 
 pub struct Report<'a> {
@@ -41,9 +41,9 @@ pub struct Report<'a> {
 }
 
 impl<'a> Report<'a> {
-    pub fn new(app_name: &'a str) -> Self {
+    pub fn new() -> Self {
         Report {
-            info: ReportInfo { app_name },
+            info: ReportInfo { app_name: None },
             collectors: vec![],
         }
     }
@@ -85,7 +85,11 @@ pub mod collectors {
     }
 
     impl SoftwareVersion {
-        pub fn new<S: AsRef<str>>(version: S) -> Self {
+        pub fn new() -> Self {
+            Self { version: env!("CARGO_PKG_VERSION").into() }
+        }
+
+        pub fn custom<S: AsRef<str>>(version: S) -> Self {
             Self {
                 version: version.as_ref().into(),
             }
@@ -98,7 +102,7 @@ pub mod collectors {
         }
 
         fn collect(&mut self, report_info: &ReportInfo) -> Result<String> {
-            Ok(format!("{} {}", report_info.app_name, self.version.clone()))
+            Ok(format!("{} {}", report_info.app_name.unwrap_or_else(|| env!("CARGO_PKG_NAME")), self.version.clone()))
         }
     }
 

@@ -2,8 +2,8 @@ use sys_info_collector::collectors::*;
 use sys_info_collector::Report;
 
 fn main() {
-    Report::new("simple")
-        .info(SoftwareVersion::new("1.2.3"))
+    Report::new()
+        .info(SoftwareVersion::new())
         .info(OperatingSystem::new())
         .info(CommandLine::new())
         .info(EnvironmentVariables::list(&[
