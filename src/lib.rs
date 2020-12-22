@@ -24,22 +24,30 @@
 use sys_info::{os_release, os_type};
 
 #[derive(Debug)]
-pub struct Error;
+pub enum CollectionError {}
 
-type Result<T> = std::result::Result<T, Error>;
+type Result<T> = std::result::Result<T, CollectionError>;
 
 pub trait Collector {
     fn description(&self) -> String;
-    fn collect(&mut self) -> Result<String>;
+    fn collect(&mut self, report_info: &ReportInfo) -> Result<String>;
 }
 
-pub struct Report {
+pub struct ReportInfo<'a> {
+    app_name: &'a str,
+}
+
+pub struct Report<'a> {
+    info: ReportInfo<'a>,
     collectors: Vec<Box<dyn Collector>>,
 }
 
-impl Report {
-    pub fn new() -> Self {
-        Report { collectors: vec![] }
+impl<'a> Report<'a> {
+    pub fn new(app_name: &'a str) -> Self {
+        Report {
+            info: ReportInfo { app_name },
+            collectors: vec![],
+        }
     }
 
     pub fn add<C: Collector + 'static>(mut self, collector: C) -> Self {
@@ -54,7 +62,7 @@ impl Report {
             report += "## ";
             report += &collector.description();
             report += "\n\n";
-            report += &collector.collect().unwrap();
+            report += &collector.collect(&self.info).unwrap();
             report += "\n\n";
         }
         report
@@ -78,32 +86,33 @@ impl Collector for SoftwareVersion {
         "Software version".into()
     }
 
-    fn collect(&mut self) -> Result<String> {
-        Ok(self.version.clone())
+    fn collect(&mut self, report_info: &ReportInfo) -> Result<String> {
+        Ok(format!("{} {}", report_info.app_name, self.version.clone()))
     }
 }
 
-pub struct CommandLineArguments {}
+pub struct CommandLine {}
 
-impl CommandLineArguments {
+impl CommandLine {
     pub fn new() -> Self {
         Self {}
     }
 }
 
-impl Collector for CommandLineArguments {
+impl Collector for CommandLine {
     fn description(&self) -> String {
         "Command-line arguments".into()
     }
 
-    fn collect(&mut self) -> Result<String> {
-        let mut result = String::from("[");
+    fn collect(&mut self, _: &ReportInfo) -> Result<String> {
+        let mut result = String::from("```\n");
 
-        for arg in std::env::args() {
-            result += &format!("'{}', ", arg);
+        for arg in std::env::args_os() {
+            result += arg.to_string_lossy().as_ref();
+            result += " ";
         }
 
-        result += "]";
+        result += "\n```";
         Ok(result)
     }
 }
@@ -121,7 +130,7 @@ impl Collector for OperatingSystem {
         "Operating system".into()
     }
 
-    fn collect(&mut self) -> Result<String> {
+    fn collect(&mut self, _: &ReportInfo) -> Result<String> {
         Ok(format!("{} {}", os_type().unwrap(), os_release().unwrap()))
     }
 }
@@ -132,10 +141,10 @@ mod tests {
 
     #[test]
     fn basic() {
-        let report = Report::new()
+        let report = Report::new("bat")
+            .add(SoftwareVersion::new("0.17.1"))
             .add(OperatingSystem::new())
-            .add(SoftwareVersion::new("1.3.4"))
-            .add(CommandLineArguments::new())
+            .add(CommandLine::new())
             .generate();
 
         println!("{}", "Report:");
