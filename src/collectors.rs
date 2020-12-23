@@ -6,6 +6,21 @@ use super::Result;
 
 use crate::report::ReportEntry;
 
+#[derive(Debug)]
+pub enum CollectionError {
+    CouldNotRetrieve(String),
+}
+
+impl CollectionError {
+    pub(crate) fn to_entry(&self) -> ReportEntry {
+        use CollectionError::*;
+
+        match self {
+            CouldNotRetrieve(what) => ReportEntry::Text(format!("Could not retrieve {}", what)),
+        }
+    }
+}
+
 pub trait Collector {
     fn description(&self) -> &str;
     fn collect(&mut self, crate_info: &CrateInfo) -> Result<ReportEntry>;
@@ -80,11 +95,10 @@ impl Collector for OperatingSystem {
     }
 
     fn collect(&mut self, _: &CrateInfo) -> Result<ReportEntry> {
-        Ok(ReportEntry::Text(format!(
-            "{} {}",
-            os_type().unwrap(),
-            os_release().unwrap()
-        )))
+        let os_type = os_type()
+            .map_err(|_| CollectionError::CouldNotRetrieve("Operating system type".into()))?;
+        let os_release = os_release().unwrap_or("(unknown version)".into());
+        Ok(ReportEntry::Text(format!("{} {}", os_type, os_release)))
     }
 }
 

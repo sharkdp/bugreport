@@ -38,7 +38,9 @@ impl<'a> BugReport<'a> {
         let mut sections = vec![];
 
         for collector in &mut self.collectors {
-            let entry = collector.collect(&self.info).unwrap();
+            let entry = collector
+                .collect(&self.info)
+                .unwrap_or_else(|e| e.to_entry());
             sections.push(ReportSection {
                 title: collector.description(),
                 entry,
