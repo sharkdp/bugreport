@@ -133,7 +133,7 @@ pub mod collectors {
 
     impl Collector for CommandLine {
         fn description(&self) -> String {
-            "Command-line arguments".into()
+            "Command-line".into()
         }
 
         fn collect(&mut self, _: &ReportInfo) -> Result<String> {
@@ -189,10 +189,11 @@ pub mod collectors {
 
             for var in &self.list {
                 let value =
-                    std::env::var_os(&var).map(|value| format!("'{}'", value.to_string_lossy()));
+                    std::env::var_os(&var).map(|value| value.to_string_lossy().into_owned());
+                let value: Option<String> = value.map(|v| snailquote::escape(&v).into());
 
                 result += &format!(
-                    "{} = {}\n",
+                    "{}={}\n",
                     var.to_string_lossy(),
                     value.unwrap_or_else(|| "<not set>".into())
                 );
