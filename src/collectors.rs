@@ -5,7 +5,7 @@ use super::CrateInfo;
 use super::Result;
 
 pub trait Collector {
-    fn description(&self) -> String;
+    fn description<'a>(&'a self) -> &'a str;
     fn collect(&mut self, crate_info: &CrateInfo) -> Result<String>;
 }
 
@@ -26,8 +26,8 @@ impl SoftwareVersion {
 }
 
 impl Collector for SoftwareVersion {
-    fn description(&self) -> String {
-        "Software version".into()
+    fn description(&self) -> &str {
+        "Software version"
     }
 
     fn collect(&mut self, crate_info: &CrateInfo) -> Result<String> {
@@ -48,8 +48,8 @@ impl CommandLine {
 }
 
 impl Collector for CommandLine {
-    fn description(&self) -> String {
-        "Command-line".into()
+    fn description(&self) -> &str {
+        "Command-line"
     }
 
     fn collect(&mut self, _: &CrateInfo) -> Result<String> {
@@ -74,8 +74,8 @@ impl OperatingSystem {
 }
 
 impl Collector for OperatingSystem {
-    fn description(&self) -> String {
-        "Operating system".into()
+    fn description(&self) -> &str {
+        "Operating system"
     }
 
     fn collect(&mut self, _: &CrateInfo) -> Result<String> {
@@ -96,8 +96,8 @@ impl EnvironmentVariables {
 }
 
 impl Collector for EnvironmentVariables {
-    fn description(&self) -> String {
-        "Environment variables".into()
+    fn description(&self) -> &str {
+        "Environment variables"
     }
 
     fn collect(&mut self, _: &CrateInfo) -> Result<String> {
