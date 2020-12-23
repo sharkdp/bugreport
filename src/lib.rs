@@ -28,25 +28,25 @@ type Result<T> = std::result::Result<T, CollectionError>;
 
 pub trait Collector {
     fn description(&self) -> String;
-    fn collect(&mut self, report_info: &ReportInfo) -> Result<String>;
+    fn collect(&mut self, crate_info: &CrateInfo) -> Result<String>;
 }
 
-pub struct ReportInfo<'a> {
-    app_name: &'a str,
-    crate_version: &'a str,
+pub struct CrateInfo<'a> {
+    pkg_name: &'a str,
+    pkg_version: &'a str,
 }
 
-pub struct Report<'a> {
-    info: ReportInfo<'a>,
+pub struct BugReport<'a> {
+    info: CrateInfo<'a>,
     collectors: Vec<Box<dyn Collector>>,
 }
 
-impl<'a> Report<'a> {
-    pub fn new(app_name: &'a str, crate_version: &'a str) -> Self {
-        Report {
-            info: ReportInfo {
-                app_name,
-                crate_version,
+impl<'a> BugReport<'a> {
+    pub fn new(pkg_name: &'a str, pkg_version: &'a str) -> Self {
+        BugReport {
+            info: CrateInfo {
+                pkg_name,
+                pkg_version,
             },
             collectors: vec![],
         }
@@ -76,9 +76,9 @@ impl<'a> Report<'a> {
 }
 
 #[macro_export]
-macro_rules! report {
+macro_rules! bugreport {
     () => {
-        sys_info_collector::Report::new(env!("CARGO_PKG_NAME"), env!("CARGO_PKG_VERSION"))
+        bugreport::BugReport::new(env!("CARGO_PKG_NAME"), env!("CARGO_PKG_VERSION"))
     };
 }
 
@@ -88,7 +88,7 @@ pub mod collectors {
     use sys_info::{os_release, os_type};
 
     use super::Collector;
-    use super::ReportInfo;
+    use super::CrateInfo;
     use super::Result;
 
     pub struct SoftwareVersion {
@@ -112,13 +112,13 @@ pub mod collectors {
             "Software version".into()
         }
 
-        fn collect(&mut self, report_info: &ReportInfo) -> Result<String> {
+        fn collect(&mut self, crate_info: &CrateInfo) -> Result<String> {
             Ok(format!(
                 "{} {}",
-                report_info.app_name,
+                crate_info.pkg_name,
                 self.version
                     .as_deref()
-                    .unwrap_or(&report_info.crate_version)
+                    .unwrap_or(&crate_info.pkg_version)
             ))
         }
     }
@@ -136,7 +136,7 @@ pub mod collectors {
             "Command-line".into()
         }
 
-        fn collect(&mut self, _: &ReportInfo) -> Result<String> {
+        fn collect(&mut self, _: &CrateInfo) -> Result<String> {
             let mut result = String::from("```\n");
 
             for arg in std::env::args_os() {
@@ -162,7 +162,7 @@ pub mod collectors {
             "Operating system".into()
         }
 
-        fn collect(&mut self, _: &ReportInfo) -> Result<String> {
+        fn collect(&mut self, _: &CrateInfo) -> Result<String> {
             Ok(format!("{} {}", os_type().unwrap(), os_release().unwrap()))
         }
     }
@@ -184,7 +184,7 @@ pub mod collectors {
             "Environment variables".into()
         }
 
-        fn collect(&mut self, _: &ReportInfo) -> Result<String> {
+        fn collect(&mut self, _: &CrateInfo) -> Result<String> {
             let mut result = String::from("```\n");
 
             for var in &self.list {

@@ -1,8 +1,7 @@
-use sys_info_collector::collectors::*;
-use sys_info_collector::report;
+use bugreport::{bugreport, collectors::*};
 
 fn main() {
-    report!()
+    bugreport!()
         .info(SoftwareVersion::new())
         .info(OperatingSystem::new())
         .info(CommandLine::new())

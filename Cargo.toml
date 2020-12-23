@@ -1,5 +1,5 @@
 [package]
-name = "sys-info-collector"
+name = "bugreport"
 version = "0.1.0"
 authors = ["David Peter <mail@david-peter.de>"]
 edition = "2018"
