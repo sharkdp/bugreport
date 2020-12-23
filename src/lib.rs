@@ -123,7 +123,7 @@ pub mod collectors {
             let mut result = String::from("```\n");
 
             for arg in std::env::args_os() {
-                result += arg.to_string_lossy().as_ref();
+                result += &snailquote::escape(arg.to_string_lossy().as_ref());
                 result += " ";
             }
 
