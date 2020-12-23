@@ -1,27 +1,3 @@
-// Ideas:
-// - configure what app wants to collect
-// - different serialization formats: markdown, json
-// - ask user for consent
-// - anonymization: e.g. anonymize user name
-
-// Info:
-//
-// - Architecture
-// - SW version
-// - File contents
-// - Compile time information:
-//    - std::env::consts::ARCH, std::env::consts::OS
-//    - Full Target triple?
-//    - Time
-//    - Git commit
-// - Current working directory
-// - std::env::current_exe
-// - User-defined reporter
-// - env variables
-// - command line arguments
-// - date & time
-//
-
 #[derive(Debug)]
 pub enum CollectionError {}
 
