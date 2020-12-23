@@ -41,6 +41,25 @@ jobs:
         with:
           command: test
 
+  run:
+    name: Run examples
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+      - uses: actions-rs/cargo@v1
+        with:
+          command: run
+          args: --example=simple "hello world" 2 3
+      - uses: actions-rs/cargo@v1
+        with:
+          command: run
+          args: --example=custom_collector "hello world" 2 3
+
   fmt:
     name: Rustfmt
     runs-on: ubuntu-latest
