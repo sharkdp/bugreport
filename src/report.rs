@@ -1,8 +1,10 @@
+#[derive(Debug)]
 pub enum ReportEntry {
     Text(String),
     Code(String),
 }
 
+#[derive(Debug)]
 pub(crate) struct ReportSection<'a> {
     pub(crate) title: &'a str,
     pub(crate) entry: ReportEntry,
@@ -19,6 +21,7 @@ impl ReportEntry {
     }
 }
 
+#[derive(Debug)]
 pub struct Report<'a> {
     pub(crate) sections: Vec<ReportSection<'a>>,
 }

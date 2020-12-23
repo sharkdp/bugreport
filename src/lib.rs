@@ -3,11 +3,8 @@ use std::result;
 pub mod collectors;
 pub mod report;
 
-use collectors::Collector;
-use report::{Report, ReportEntry, ReportSection};
-
-#[derive(Debug)]
-pub enum CollectionError {}
+use collectors::{CollectionError, Collector};
+use report::{Report, ReportSection};
 
 pub type Result<T> = result::Result<T, CollectionError>;
 
