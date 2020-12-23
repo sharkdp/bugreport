@@ -9,5 +9,5 @@ fn main() {
             "SIMPLE_CONFIG",
             "SIMPLE_THEME",
         ]))
-        .print();
+        .print_markdown();
 }

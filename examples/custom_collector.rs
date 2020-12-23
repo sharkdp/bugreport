@@ -1,4 +1,4 @@
-use bugreport::{bugreport, collectors::*, CrateInfo, Result};
+use bugreport::{bugreport, collectors::*, report::ReportEntry, CrateInfo, Result};
 
 struct MyCollector {}
 
@@ -7,8 +7,8 @@ impl Collector for MyCollector {
         "My collector"
     }
 
-    fn collect(&mut self, _: &CrateInfo) -> Result<String> {
-        Ok("custom info".into())
+    fn collect(&mut self, _: &CrateInfo) -> Result<ReportEntry> {
+        Ok(ReportEntry::Text("custom info".into()))
     }
 }
 
@@ -16,5 +16,5 @@ fn main() {
     bugreport!()
         .info(SoftwareVersion::new())
         .info(MyCollector {})
-        .print();
+        .print_markdown();
 }

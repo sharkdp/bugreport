@@ -1,8 +1,10 @@
 use std::result;
 
 pub mod collectors;
+pub mod report;
 
 use collectors::Collector;
+use report::{Report, ReportEntry, ReportSection};
 
 #[derive(Debug)]
 pub enum CollectionError {}
@@ -35,21 +37,23 @@ impl<'a> BugReport<'a> {
         self
     }
 
-    pub fn generate(&mut self) -> String {
-        let mut report = String::new();
+    pub fn generate(&mut self) -> Report {
+        let mut sections = vec![];
 
         for collector in &mut self.collectors {
-            report += "## ";
-            report += &collector.description();
-            report += "\n\n";
-            report += &collector.collect(&self.info).unwrap();
-            report += "\n\n";
+            let entry = collector.collect(&self.info).unwrap();
+            sections.push(ReportSection {
+                title: collector.description(),
+                entry,
+            });
         }
-        report
+
+        Report { sections }
     }
 
-    pub fn print(&mut self) {
-        print!("{}", self.generate());
+    pub fn print_markdown(&mut self) {
+        let report = self.generate();
+        print!("{}", report.to_markdown());
     }
 }
 

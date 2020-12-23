@@ -4,9 +4,11 @@ use sys_info::{os_release, os_type};
 use super::CrateInfo;
 use super::Result;
 
+use crate::report::ReportEntry;
+
 pub trait Collector {
-    fn description<'a>(&'a self) -> &'a str;
-    fn collect(&mut self, crate_info: &CrateInfo) -> Result<String>;
+    fn description(&self) -> &str;
+    fn collect(&mut self, crate_info: &CrateInfo) -> Result<ReportEntry>;
 }
 
 pub struct SoftwareVersion {
@@ -30,12 +32,12 @@ impl Collector for SoftwareVersion {
         "Software version"
     }
 
-    fn collect(&mut self, crate_info: &CrateInfo) -> Result<String> {
-        Ok(format!(
+    fn collect(&mut self, crate_info: &CrateInfo) -> Result<ReportEntry> {
+        Ok(ReportEntry::Text(format!(
             "{} {}",
             crate_info.pkg_name,
             self.version.as_deref().unwrap_or(&crate_info.pkg_version)
-        ))
+        )))
     }
 }
 
@@ -52,16 +54,15 @@ impl Collector for CommandLine {
         "Command-line"
     }
 
-    fn collect(&mut self, _: &CrateInfo) -> Result<String> {
-        let mut result = String::from("```\n");
+    fn collect(&mut self, _: &CrateInfo) -> Result<ReportEntry> {
+        let mut result = String::new();
 
         for arg in std::env::args_os() {
             result += &snailquote::escape(arg.to_string_lossy().as_ref());
             result += " ";
         }
 
-        result += "\n```";
-        Ok(result)
+        Ok(ReportEntry::Code(result))
     }
 }
 
@@ -78,8 +79,12 @@ impl Collector for OperatingSystem {
         "Operating system"
     }
 
-    fn collect(&mut self, _: &CrateInfo) -> Result<String> {
-        Ok(format!("{} {}", os_type().unwrap(), os_release().unwrap()))
+    fn collect(&mut self, _: &CrateInfo) -> Result<ReportEntry> {
+        Ok(ReportEntry::Text(format!(
+            "{} {}",
+            os_type().unwrap(),
+            os_release().unwrap()
+        )))
     }
 }
 
@@ -100,8 +105,8 @@ impl Collector for EnvironmentVariables {
         "Environment variables"
     }
 
-    fn collect(&mut self, _: &CrateInfo) -> Result<String> {
-        let mut result = String::from("```\n");
+    fn collect(&mut self, _: &CrateInfo) -> Result<ReportEntry> {
+        let mut result = String::new();
 
         for var in &self.list {
             let value = std::env::var_os(&var).map(|value| value.to_string_lossy().into_owned());
@@ -114,7 +119,6 @@ impl Collector for EnvironmentVariables {
             );
         }
 
-        result += "\n```";
-        Ok(result)
+        Ok(ReportEntry::Code(result))
     }
 }
