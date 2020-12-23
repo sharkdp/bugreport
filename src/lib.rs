@@ -2,15 +2,12 @@ use std::result;
 
 pub mod collectors;
 
+use collectors::Collector;
+
 #[derive(Debug)]
 pub enum CollectionError {}
 
 pub type Result<T> = result::Result<T, CollectionError>;
-
-pub trait Collector {
-    fn description(&self) -> String;
-    fn collect(&mut self, crate_info: &CrateInfo) -> Result<String>;
-}
 
 pub struct CrateInfo<'a> {
     pkg_name: &'a str,

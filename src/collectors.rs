@@ -1,9 +1,13 @@
 use std::ffi::{OsStr, OsString};
 use sys_info::{os_release, os_type};
 
-use super::Collector;
 use super::CrateInfo;
 use super::Result;
+
+pub trait Collector {
+    fn description(&self) -> String;
+    fn collect(&mut self, crate_info: &CrateInfo) -> Result<String>;
+}
 
 pub struct SoftwareVersion {
     version: Option<String>,
