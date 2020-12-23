@@ -19,12 +19,13 @@
 // - User-defined reporter
 // - env variables
 // - command line arguments
+// - date & time
 //
 
 #[derive(Debug)]
 pub enum CollectionError {}
 
-type Result<T> = std::result::Result<T, CollectionError>;
+pub type Result<T> = std::result::Result<T, CollectionError>;
 
 pub trait Collector {
     fn description(&self) -> String;
