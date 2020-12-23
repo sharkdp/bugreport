@@ -86,7 +86,9 @@ pub mod collectors {
 
     impl SoftwareVersion {
         pub fn new() -> Self {
-            Self { version: env!("CARGO_PKG_VERSION").into() }
+            Self {
+                version: env!("CARGO_PKG_VERSION").into(),
+            }
         }
 
         pub fn custom<S: AsRef<str>>(version: S) -> Self {
@@ -102,7 +104,13 @@ pub mod collectors {
         }
 
         fn collect(&mut self, report_info: &ReportInfo) -> Result<String> {
-            Ok(format!("{} {}", report_info.app_name.unwrap_or_else(|| env!("CARGO_PKG_NAME")), self.version.clone()))
+            Ok(format!(
+                "{} {}",
+                report_info
+                    .app_name
+                    .unwrap_or_else(|| env!("CARGO_PKG_NAME")),
+                self.version.clone()
+            ))
         }
     }
 
