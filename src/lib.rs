@@ -116,9 +116,7 @@ pub mod collectors {
             Ok(format!(
                 "{} {}",
                 crate_info.pkg_name,
-                self.version
-                    .as_deref()
-                    .unwrap_or(&crate_info.pkg_version)
+                self.version.as_deref().unwrap_or(&crate_info.pkg_version)
             ))
         }
     }
