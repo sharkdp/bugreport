@@ -32,7 +32,8 @@ pub trait Collector {
 }
 
 pub struct ReportInfo<'a> {
-    app_name: Option<&'a str>,
+    app_name: &'a str,
+    crate_version: &'a str,
 }
 
 pub struct Report<'a> {
@@ -41,9 +42,12 @@ pub struct Report<'a> {
 }
 
 impl<'a> Report<'a> {
-    pub fn new() -> Self {
+    pub fn new(app_name: &'a str, crate_version: &'a str) -> Self {
         Report {
-            info: ReportInfo { app_name: None },
+            info: ReportInfo {
+                app_name,
+                crate_version,
+            },
             collectors: vec![],
         }
     }
@@ -71,6 +75,13 @@ impl<'a> Report<'a> {
     }
 }
 
+#[macro_export]
+macro_rules! report {
+    () => {
+        sys_info_collector::Report::new(env!("CARGO_PKG_NAME"), env!("CARGO_PKG_VERSION"))
+    };
+}
+
 pub mod collectors {
 
     use std::ffi::{OsStr, OsString};
@@ -81,19 +92,17 @@ pub mod collectors {
     use super::Result;
 
     pub struct SoftwareVersion {
-        version: String,
+        version: Option<String>,
     }
 
     impl SoftwareVersion {
         pub fn new() -> Self {
-            Self {
-                version: env!("CARGO_PKG_VERSION").into(),
-            }
+            Self { version: None }
         }
 
         pub fn custom<S: AsRef<str>>(version: S) -> Self {
             Self {
-                version: version.as_ref().into(),
+                version: Some(version.as_ref().into()),
             }
         }
     }
@@ -106,10 +115,10 @@ pub mod collectors {
         fn collect(&mut self, report_info: &ReportInfo) -> Result<String> {
             Ok(format!(
                 "{} {}",
-                report_info
-                    .app_name
-                    .unwrap_or_else(|| env!("CARGO_PKG_NAME")),
-                self.version.clone()
+                report_info.app_name,
+                self.version
+                    .as_deref()
+                    .unwrap_or(&report_info.crate_version)
             ))
         }
     }

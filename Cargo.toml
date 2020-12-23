@@ -5,4 +5,5 @@ authors = ["David Peter <mail@david-peter.de>"]
 edition = "2018"
 
 [dependencies]
-sys-info = "0.7.0"
+sys-info = "0.7"
+snailquote = "0.3"
