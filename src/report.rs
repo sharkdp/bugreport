@@ -1,7 +1,13 @@
 #[derive(Debug)]
+pub struct Code {
+    pub language: Option<String>,
+    pub code: String,
+}
+
+#[derive(Debug)]
 pub enum ReportEntry {
     Text(String),
-    Code(String),
+    Code(Code),
 }
 
 #[derive(Debug)]
@@ -16,7 +22,11 @@ impl ReportEntry {
 
         match self {
             Text(content) => format!("{}\n", content),
-            Code(code) => format!("```\n{}\n```\n", code),
+            Code(c) => format!(
+                "```{}\n{}\n```\n",
+                c.language.as_deref().unwrap_or(""),
+                c.code
+            ),
         }
     }
 }

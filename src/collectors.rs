@@ -4,7 +4,7 @@ use sys_info::{os_release, os_type};
 use super::CrateInfo;
 use super::Result;
 
-use crate::report::ReportEntry;
+use crate::report::{Code, ReportEntry};
 
 #[derive(Debug)]
 pub enum CollectionError {
@@ -77,7 +77,10 @@ impl Collector for CommandLine {
             result += " ";
         }
 
-        Ok(ReportEntry::Code(result))
+        Ok(ReportEntry::Code(Code {
+            language: Some("bash".into()),
+            code: result,
+        }))
     }
 }
 
@@ -132,7 +135,11 @@ impl Collector for EnvironmentVariables {
                 value.unwrap_or_else(|| "<not set>".into())
             );
         }
+        result.pop();
 
-        Ok(ReportEntry::Code(result))
+        Ok(ReportEntry::Code(Code {
+            language: Some("bash".into()),
+            code: result,
+        }))
     }
 }
