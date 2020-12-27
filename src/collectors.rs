@@ -1,4 +1,6 @@
 use std::ffi::{OsStr, OsString};
+use std::process::Command;
+
 use sys_info::{os_release, os_type};
 
 use super::CrateInfo;
@@ -73,7 +75,7 @@ impl Collector for CommandLine {
         let mut result = String::new();
 
         for arg in std::env::args_os() {
-            result += &snailquote::escape(arg.to_string_lossy().as_ref());
+            result += &snailquote::escape(&arg.to_string_lossy());
             result += " ";
         }
 
@@ -139,6 +141,69 @@ impl Collector for EnvironmentVariables {
 
         Ok(ReportEntry::Code(Code {
             language: Some("bash".into()),
+            code: result,
+        }))
+    }
+}
+
+pub struct CommandOutput<'a> {
+    title: &'a str,
+    cmd: &'a OsStr,
+    cmd_args: Vec<&'a OsStr>,
+}
+
+impl<'a> CommandOutput<'a> {
+    pub fn new<S>(title: &'a str, cmd: &'a OsStr, args: &'a [S]) -> Self
+    where
+        S: AsRef<OsStr> + 'a,
+    {
+        let mut cmd_args = Vec::new();
+        for a in args {
+            cmd_args.push(a.as_ref());
+        }
+
+        CommandOutput {
+            title,
+            cmd: cmd.as_ref(),
+            cmd_args,
+        }
+    }
+}
+
+impl<'a> Collector for CommandOutput<'a> {
+    fn description(&self) -> &str {
+        self.title
+    }
+
+    fn collect(&mut self, _: &CrateInfo) -> Result<ReportEntry> {
+        let mut result = String::new();
+
+        result += "> ";
+        result += &self.cmd.to_string_lossy();
+        result += " ";
+        for arg in &self.cmd_args {
+            result += &snailquote::escape(&arg.to_string_lossy());
+            result += " ";
+        }
+
+        result += "\n";
+
+        let output = Command::new(self.cmd)
+            .args(&self.cmd_args)
+            .output()
+            .map_err(|_| CollectionError::CouldNotRetrieve("TODO".into()))?;
+
+        // TODO: stderr, exit code
+        let stdout = String::from_utf8(output.stdout)
+            .map_err(|_| CollectionError::CouldNotRetrieve("TODO".into()))?;
+
+        result += &stdout;
+
+        // trim in place
+        result.truncate(result.trim_end().len());
+
+        Ok(ReportEntry::Code(Code {
+            language: None,
             code: result,
         }))
     }

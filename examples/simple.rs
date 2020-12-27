@@ -9,5 +9,10 @@ fn main() {
             "SIMPLE_CONFIG",
             "SIMPLE_THEME",
         ]))
+        .info(CommandOutput::new(
+            "less version",
+            std::ffi::OsStr::new("less"),
+            &["--version"],
+        ))
         .print_markdown();
 }
