@@ -6,13 +6,15 @@ fn main() {
         .info(OperatingSystem::new())
         .info(CommandLine::new())
         .info(EnvironmentVariables::list(&[
+            "SHELL",
+            "PATH",
             "SIMPLE_CONFIG",
             "SIMPLE_THEME",
         ]))
         .info(CommandOutput::new(
-            "less version",
-            std::ffi::OsStr::new("less"),
-            &["--version"],
+            "System information",
+            std::ffi::OsStr::new("uname"),
+            &["-a"],
         ))
         .print_markdown();
 }
