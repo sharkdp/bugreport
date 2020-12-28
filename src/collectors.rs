@@ -44,6 +44,12 @@ impl SoftwareVersion {
     }
 }
 
+impl Default for SoftwareVersion {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl Collector for SoftwareVersion {
     fn description(&self) -> &str {
         "Software version"
@@ -63,6 +69,12 @@ pub struct CommandLine {}
 impl CommandLine {
     pub fn new() -> Self {
         Self {}
+    }
+}
+
+impl Default for CommandLine {
+    fn default() -> Self {
+        Self::new()
     }
 }
 
@@ -94,6 +106,12 @@ impl OperatingSystem {
     }
 }
 
+impl Default for OperatingSystem {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl Collector for OperatingSystem {
     fn description(&self) -> &str {
         "Operating system"
@@ -102,7 +120,8 @@ impl Collector for OperatingSystem {
     fn collect(&mut self, _: &CrateInfo) -> Result<ReportEntry> {
         let os_type = os_type()
             .map_err(|_| CollectionError::CouldNotRetrieve("Operating system type".into()))?;
-        let os_release = os_release().unwrap_or("(unknown version)".into());
+        let os_release = os_release();
+        let os_release = os_release.as_deref().unwrap_or("(unknown version)");
         Ok(ReportEntry::Text(format!("{} {}", os_type, os_release)))
     }
 }
@@ -164,7 +183,7 @@ impl<'a> CommandOutput<'a> {
 
         CommandOutput {
             title,
-            cmd: cmd.as_ref(),
+            cmd,
             cmd_args,
         }
     }
