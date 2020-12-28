@@ -1,4 +1,5 @@
 use std::ffi::{OsStr, OsString};
+use std::ops::Deref;
 use std::process::Command;
 
 use sys_info::{os_release, os_type};
@@ -121,7 +122,10 @@ impl Collector for OperatingSystem {
         let os_type = os_type()
             .map_err(|_| CollectionError::CouldNotRetrieve("Operating system type".into()))?;
         let os_release = os_release();
-        let os_release = os_release.as_deref().unwrap_or("(unknown version)");
+        let os_release = os_release
+            .as_ref()
+            .map(|t| t.deref())
+            .unwrap_or("(unknown version)");
         Ok(ReportEntry::Text(format!("{} {}", os_type, os_release)))
     }
 }
