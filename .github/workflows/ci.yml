@@ -43,7 +43,8 @@ jobs:
 
   run:
     name: Run examples
-    runs-on: ${{ matrix.job.os }}
+    strategy:
+      fail-fast: false
       matrix:
         job:
           # { os, target, cargo-options, features, use-cross, toolchain }
@@ -60,6 +61,7 @@ jobs:
           - { os: windows-latest , target: i686-pc-windows-msvc        }
           - { os: windows-latest , target: x86_64-pc-windows-gnu       }
           - { os: windows-latest , target: x86_64-pc-windows-msvc      }
+    runs-on: ${{ matrix.job.os }}
     steps:
       - uses: actions/checkout@v2
       - uses: actions-rs/toolchain@v1
