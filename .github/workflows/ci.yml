@@ -10,7 +10,7 @@ jobs:
       matrix:
         rust:
           - stable
-          - 1.40.0
+          - 1.43.0
     steps:
       - uses: actions/checkout@v2
       - uses: actions-rs/toolchain@v1
@@ -29,7 +29,7 @@ jobs:
       matrix:
         rust:
           - stable
-          - 1.40.0
+          - 1.43.0
     steps:
       - uses: actions/checkout@v2
       - uses: actions-rs/toolchain@v1
@@ -43,20 +43,39 @@ jobs:
 
   run:
     name: Run examples
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.job.os }}
+      matrix:
+        job:
+          # { os, target, cargo-options, features, use-cross, toolchain }
+          - { os: ubuntu-latest  , target: arm-unknown-linux-gnueabihf , use-cross: use-cross }
+          - { os: ubuntu-18.04   , target: aarch64-unknown-linux-gnu   , use-cross: use-cross }
+          - { os: ubuntu-18.04   , target: i586-unknown-linux-gnu      , use-cross: use-cross }
+          - { os: ubuntu-18.04   , target: i686-unknown-linux-gnu      , use-cross: use-cross }
+          - { os: ubuntu-18.04   , target: i686-unknown-linux-musl     , use-cross: use-cross }
+          - { os: ubuntu-18.04   , target: x86_64-unknown-linux-gnu    , use-cross: use-cross }
+          - { os: ubuntu-18.04   , target: x86_64-unknown-linux-musl   , use-cross: use-cross }
+          - { os: ubuntu-16.04   , target: x86_64-unknown-linux-gnu    , use-cross: use-cross }
+          - { os: macos-latest   , target: x86_64-apple-darwin         }
+          - { os: windows-latest , target: i686-pc-windows-gnu         }
+          - { os: windows-latest , target: i686-pc-windows-msvc        }
+          - { os: windows-latest , target: x86_64-pc-windows-gnu       }
+          - { os: windows-latest , target: x86_64-pc-windows-msvc      }
     steps:
       - uses: actions/checkout@v2
       - uses: actions-rs/toolchain@v1
         with:
           profile: minimal
           toolchain: stable
+          target: ${{ matrix.job.target }}
           override: true
       - uses: actions-rs/cargo@v1
         with:
+          use-cross: true
           command: run
           args: --example=simple "hello world" 2 3
       - uses: actions-rs/cargo@v1
         with:
+          use-cross: true
           command: run
           args: --example=custom_collector "hello world" 2 3
 
@@ -67,7 +86,7 @@ jobs:
       matrix:
         rust:
           - stable
-          - 1.40.0
+          - 1.43.0
     steps:
       - uses: actions/checkout@v2
       - uses: actions-rs/toolchain@v1
@@ -88,7 +107,7 @@ jobs:
       matrix:
         rust:
           - stable
-          - 1.40.0
+          - 1.43.0
     steps:
       - uses: actions/checkout@v2
       - uses: actions-rs/toolchain@v1
