@@ -47,20 +47,26 @@ jobs:
       fail-fast: false
       matrix:
         job:
-          # { os, target, cargo-options, features, use-cross, toolchain }
-          - { os: ubuntu-latest  , target: arm-unknown-linux-gnueabihf , use-cross: use-cross }
-          - { os: ubuntu-18.04   , target: aarch64-unknown-linux-gnu   , use-cross: use-cross }
-          - { os: ubuntu-18.04   , target: i586-unknown-linux-gnu      , use-cross: use-cross }
-          - { os: ubuntu-18.04   , target: i686-unknown-linux-gnu      , use-cross: use-cross }
-          - { os: ubuntu-18.04   , target: i686-unknown-linux-musl     , use-cross: use-cross }
-          - { os: ubuntu-18.04   , target: x86_64-unknown-linux-gnu    , use-cross: use-cross }
-          - { os: ubuntu-18.04   , target: x86_64-unknown-linux-musl   , use-cross: use-cross }
-          - { os: ubuntu-16.04   , target: x86_64-unknown-linux-gnu    , use-cross: use-cross }
-          - { os: macos-latest   , target: x86_64-apple-darwin         }
-          - { os: windows-latest , target: i686-pc-windows-gnu         }
-          - { os: windows-latest , target: i686-pc-windows-msvc        }
-          - { os: windows-latest , target: x86_64-pc-windows-gnu       }
-          - { os: windows-latest , target: x86_64-pc-windows-msvc      }
+          # Ubuntu 20.04
+          - { os: ubuntu-20.04   , target: x86_64-unknown-linux-gnu    , use-cross: false  }
+          - { os: ubuntu-20.04   , target: x86_64-unknown-linux-musl   , use-cross: false  }
+          - { os: ubuntu-20.04   , target: arm-unknown-linux-gnueabihf , use-cross: true  }
+          - { os: ubuntu-20.04   , target: aarch64-unknown-linux-gnu   , use-cross: true  }
+          - { os: ubuntu-20.04   , target: i586-unknown-linux-gnu      , use-cross: true  }
+          - { os: ubuntu-20.04   , target: i686-unknown-linux-gnu      , use-cross: true  }
+          - { os: ubuntu-20.04   , target: i686-unknown-linux-musl     , use-cross: true  }
+          # Older Ubuntu versions
+          - { os: ubuntu-18.04   , target: x86_64-unknown-linux-gnu    , use-cross: false }
+          - { os: ubuntu-16.04   , target: x86_64-unknown-linux-gnu    , use-cross: false }
+          # MacOS
+          - { os: macos-11.0     , target: x86_64-apple-darwin         , use-cross: false }
+          - { os: macos-10.15    , target: x87_64-apple-darwin         , use-cross: false }
+          # Windows
+          - { os: windows-2019   , target: i686-pc-windows-gnu         , use-cross: false }
+          - { os: windows-2019   , target: i686-pc-windows-msvc        , use-cross: false }
+          - { os: windows-2019   , target: x86_64-pc-windows-gnu       , use-cross: false }
+          - { os: windows-2019   , target: x86_64-pc-windows-msvc      , use-cross: false }
+
     runs-on: ${{ matrix.job.os }}
     steps:
       - uses: actions/checkout@v2
@@ -72,14 +78,14 @@ jobs:
           override: true
       - uses: actions-rs/cargo@v1
         with:
-          use-cross: true
+          use-cross: ${{ matrix.job.use-cross }}
           command: run
-          args: --example=simple "hello world" 2 3
+          args: --target ${{ matrix.job.target }} --example=simple -- "hello world" 2 3
       - uses: actions-rs/cargo@v1
         with:
-          use-cross: true
+          use-cross: ${{ matrix.job.use-cross }}
           command: run
-          args: --example=custom_collector "hello world" 2 3
+          args: --target ${{ matrix.job.target }} --example=custom_collector -- "hello world" 2 3
 
   fmt:
     name: Rustfmt
