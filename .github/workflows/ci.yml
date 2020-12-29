@@ -48,8 +48,8 @@ jobs:
       matrix:
         job:
           # Ubuntu 20.04
-          - { os: ubuntu-20.04   , target: x86_64-unknown-linux-gnu    , use-cross: false  }
-          - { os: ubuntu-20.04   , target: x86_64-unknown-linux-musl   , use-cross: false  }
+          - { os: ubuntu-20.04   , target: x86_64-unknown-linux-gnu    , use-cross: false }
+          - { os: ubuntu-20.04   , target: x86_64-unknown-linux-musl   , use-cross: true  }
           - { os: ubuntu-20.04   , target: arm-unknown-linux-gnueabihf , use-cross: true  }
           - { os: ubuntu-20.04   , target: aarch64-unknown-linux-gnu   , use-cross: true  }
           - { os: ubuntu-20.04   , target: i586-unknown-linux-gnu      , use-cross: true  }
@@ -60,9 +60,9 @@ jobs:
           - { os: ubuntu-16.04   , target: x86_64-unknown-linux-gnu    , use-cross: false }
           # MacOS
           - { os: macos-11.0     , target: x86_64-apple-darwin         , use-cross: false }
-          - { os: macos-10.15    , target: x87_64-apple-darwin         , use-cross: false }
+          - { os: macos-10.15    , target: x86_64-apple-darwin         , use-cross: false }
           # Windows
-          - { os: windows-2019   , target: i686-pc-windows-gnu         , use-cross: false }
+          - { os: windows-2019   , target: i686-pc-windows-gnu         , use-cross: true  }
           - { os: windows-2019   , target: i686-pc-windows-msvc        , use-cross: false }
           - { os: windows-2019   , target: x86_64-pc-windows-gnu       , use-cross: false }
           - { os: windows-2019   , target: x86_64-pc-windows-msvc      , use-cross: false }
