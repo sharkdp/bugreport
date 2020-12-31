@@ -8,6 +8,21 @@ report (similar to `git bugreport` or `ffmpeg … -report`).
 
 **Note**: This library is in an early stage and the API is very likely to change.
 
+## Example
+
+```rust
+use bugreport::{bugreport, collectors::*};
+
+fn main() {
+    bugreport!()
+        .info(OperatingSystem::default())
+        .info(SoftwareVersion::default())
+        .info(CommandLine::default())
+        .info(EnvironmentVariables::list(&["SHELL", "PATH"]))
+        .print_markdown();
+}
+```
+
 ## Features
 
 - [x] Markdown export
