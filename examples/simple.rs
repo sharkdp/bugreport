@@ -2,9 +2,9 @@ use bugreport::{bugreport, collectors::*};
 
 fn main() {
     bugreport!()
-        .info(SoftwareVersion::new())
-        .info(OperatingSystem::new())
-        .info(CommandLine::new())
+        .info(SoftwareVersion::default())
+        .info(OperatingSystem::default())
+        .info(CommandLine::default())
         .info(EnvironmentVariables::list(&[
             "SHELL",
             "PATH",

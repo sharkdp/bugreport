@@ -34,10 +34,6 @@ pub struct SoftwareVersion {
 }
 
 impl SoftwareVersion {
-    pub fn new() -> Self {
-        Self { version: None }
-    }
-
     pub fn custom<S: AsRef<str>>(version: S) -> Self {
         Self {
             version: Some(version.as_ref().into()),
@@ -47,7 +43,7 @@ impl SoftwareVersion {
 
 impl Default for SoftwareVersion {
     fn default() -> Self {
-        Self::new()
+        Self { version: None }
     }
 }
 
@@ -67,15 +63,9 @@ impl Collector for SoftwareVersion {
 
 pub struct CommandLine {}
 
-impl CommandLine {
-    pub fn new() -> Self {
-        Self {}
-    }
-}
-
 impl Default for CommandLine {
     fn default() -> Self {
-        Self::new()
+        Self {}
     }
 }
 
@@ -101,15 +91,9 @@ impl Collector for CommandLine {
 
 pub struct OperatingSystem {}
 
-impl OperatingSystem {
-    pub fn new() -> Self {
-        Self {}
-    }
-}
-
 impl Default for OperatingSystem {
     fn default() -> Self {
-        Self::new()
+        Self {}
     }
 }
 

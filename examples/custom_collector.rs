@@ -14,7 +14,7 @@ impl Collector for MyCollector {
 
 fn main() {
     bugreport!()
-        .info(SoftwareVersion::new())
+        .info(SoftwareVersion::default())
         .info(MyCollector {})
         .print_markdown();
 }
