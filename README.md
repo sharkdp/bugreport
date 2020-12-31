@@ -1,6 +1,6 @@
 # bugreport
 
-![Continuous integration](https://github.com/sharkdp/bugreport/workflows/Continuous%20integration/badge.svg)
+![Continuous integration](https://github.com/sharkdp/bugreport/workflows/Build/badge.svg)
 
 `bugreport` is a Rust library that helps application developers to automatically collect
 information about the system and the environment that users can send along with a bug
