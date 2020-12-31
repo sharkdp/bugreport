@@ -8,14 +8,14 @@ report (similar to `git bugreport` or `ffmpeg … -report`).
 
 **Note**: This library is in an early stage and the API is very likely to change.
 
-## Features and design goals
+## Features
 
 - [x] Markdown export
-- [ ] JSON export (?)
 - [ ] Ask user for consent
 - [ ] Automatic anonymization of information? (e.g.: remove `/home/username` from paths)
 - [ ] Open report output in editor (instead of printing to stdout)
 - [ ] Auto-detect command-line option or environment variable (like `--diagnostic`)
+- [ ] JSON export (?)
 
 ## Collectors
 
@@ -27,7 +27,7 @@ report (similar to `git bugreport` or `ffmpeg … -report`).
 - [ ] File contents (e.g. config files)
 - [x] Run command (e.g. `less --version`)
 - [ ] Compile time information (architecture, OS, time, git commit)
-- [ ] Current working directory?
+- [ ] Current working directory
 - [ ] Date and time
 - [x] User defined collectors
 
