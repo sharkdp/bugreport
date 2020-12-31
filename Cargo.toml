@@ -5,12 +5,11 @@ categories = ["command-line-interface"]
 homepage = "https://github.com/sharkdp/bugreport"
 repository = "https://github.com/sharkdp/bugreport"
 keywords = [
-    "cli",
-    "api",
-    "terminal",
-    "cross-platform",
     "bugreport",
-    "diagnostics"
+    "diagnostics",
+    "cross-platform",
+    "cli",
+    "terminal"
 ]
 license = "MIT/Apache-2.0"
 authors = ["David Peter <mail@david-peter.de>"]
