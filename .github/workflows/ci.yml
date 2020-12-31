@@ -19,6 +19,7 @@ jobs:
           toolchain: ${{ matrix.rust }}
           override: true
       - uses: actions-rs/cargo@v1
+        name: "cargo check"
         with:
           command: check
 
@@ -38,6 +39,7 @@ jobs:
           toolchain: ${{ matrix.rust }}
           override: true
       - uses: actions-rs/cargo@v1
+        name: "cargo test"
         with:
           command: test
 
@@ -76,6 +78,7 @@ jobs:
           target: ${{ matrix.job.target }}
           override: true
       - uses: actions-rs/cargo@v1
+        name: "example 'simple'"
         env:
           SIMPLE_VAR_1: "test value in environment variable"
         with:
@@ -83,6 +86,7 @@ jobs:
           command: run
           args: --target ${{ matrix.job.target }} --example=simple -- "'test value' on command line" "two" "three"
       - uses: actions-rs/cargo@v1
+        name: "example 'custom_collector'"
         with:
           use-cross: ${{ matrix.job.use-cross }}
           command: run
@@ -100,6 +104,7 @@ jobs:
           override: true
       - run: rustup component add rustfmt
       - uses: actions-rs/cargo@v1
+        name: "cargo fmt"
         with:
           command: fmt
           args: --all -- --check
@@ -116,6 +121,7 @@ jobs:
           override: true
       - run: rustup component add clippy
       - uses: actions-rs/cargo@v1
+        name: "cargo clippy"
         with:
           command: clippy
           args: -- -D warnings
