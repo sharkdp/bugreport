@@ -1,21 +1,21 @@
 # bugreport
 
+![Continuous integration](https://github.com/sharkdp/bugreport/workflows/Continuous%20integration/badge.svg)
+
 `bugreport` is a Rust library that helps application developers to automatically collect
 information about the system and the environment that users can send along with a bug
 report (similar to `git bugreport` or `ffmpeg … -report`).
 
-
+**Note**: This library is in an early stage and the API is very likely to change.
 
 ## Features and design goals
 
 - [x] Markdown export
-- [ ] JSON export?
+- [ ] JSON export (?)
 - [ ] Ask user for consent
-- [ ] Automatic anonymization of information?
-- [x] Custom collectors
-- [ ] Minimal dependencies
-- [ ] Open output in editor
-- [ ] Auto-detect command-line option or env variable
+- [ ] Automatic anonymization of information? (e.g.: remove `/home/username` from paths)
+- [ ] Open report output in editor (instead of printing to stdout)
+- [ ] Auto-detect command-line option or environment variable (like `--diagnostic`)
 
 ## Collectors
 
@@ -29,7 +29,7 @@ report (similar to `git bugreport` or `ffmpeg … -report`).
 - [ ] Compile time information (architecture, OS, time, git commit)
 - [ ] Current working directory?
 - [ ] Date and time
-- [ ] User defined collectors
+- [x] User defined collectors
 
 ## Use cases / prior art
 
