@@ -80,7 +80,7 @@ jobs:
       - uses: actions-rs/cargo@v1
         name: "example 'simple'"
         env:
-          SIMPLE_VAR_1: "test value in environment variable"
+          SIMPLE_VAR_1: "'test value' in environment variable"
         with:
           use-cross: ${{ matrix.job.use-cross }}
           command: run
