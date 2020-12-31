@@ -8,8 +8,8 @@ fn main() {
         .info(EnvironmentVariables::list(&[
             "SHELL",
             "PATH",
-            "SIMPLE_CONFIG",
-            "SIMPLE_THEME",
+            "SIMPLE_VAR_1",
+            "SIMPLE_VAR_2",
         ]))
         .info(CommandOutput::new(
             "System information",
