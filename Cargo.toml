@@ -1,8 +1,21 @@
 [package]
 name = "bugreport"
-version = "0.1.0"
+description = "Collect system and environment information for bug reports"
+categories = ["command-line-interface"]
+homepage = "https://github.com/sharkdp/bugreport"
+repository = "https://github.com/sharkdp/bugreport"
+keywords = [
+    "cli",
+    "api",
+    "terminal",
+    "cross-platform",
+    "bugreport",
+    "diagnostics"
+]
+license = "MIT/Apache-2.0"
 authors = ["David Peter <mail@david-peter.de>"]
 edition = "2018"
+version = "0.1.0"
 
 [dependencies]
 sys-info = "0.7"
