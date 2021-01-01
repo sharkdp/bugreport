@@ -1,6 +1,7 @@
 use std::result;
 
 pub mod collectors;
+mod helper;
 pub mod report;
 
 use collectors::{CollectionError, Collector};

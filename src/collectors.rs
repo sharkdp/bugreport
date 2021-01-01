@@ -9,6 +9,7 @@ use sys_info::{os_release, os_type};
 use super::CrateInfo;
 use super::Result;
 
+use crate::helper::StringExt;
 use crate::report::{Code, ReportEntry};
 
 #[derive(Debug)]
@@ -21,7 +22,7 @@ impl CollectionError {
         use CollectionError::*;
 
         match self {
-            CouldNotRetrieve(what) => ReportEntry::Text(format!("Could not retrieve {}", what)),
+            CouldNotRetrieve(reason) => ReportEntry::Text(reason.clone()),
         }
     }
 }
@@ -208,8 +209,7 @@ impl<'a> Collector for CommandOutput<'a> {
 
         result += &stdout;
 
-        // trim in place
-        result.truncate(result.trim_end().len());
+        result.trim_end_inplace();
 
         Ok(ReportEntry::Code(Code {
             language: None,
@@ -238,8 +238,15 @@ impl<'a> Collector for FileContent<'a> {
     }
 
     fn collect(&mut self, _: &CrateInfo) -> Result<ReportEntry> {
-        let result = fs::read_to_string(&self.path)
-            .map_err(|_| CollectionError::CouldNotRetrieve("TODO".into()))?;
+        let mut result = fs::read_to_string(&self.path).map_err(|e| {
+            CollectionError::CouldNotRetrieve(format!(
+                "Could not read contents of '{}': {}.",
+                self.path.to_string_lossy(),
+                e
+            ))
+        })?;
+
+        result.trim_end_inplace();
 
         Ok(ReportEntry::Code(Code {
             language: None,
