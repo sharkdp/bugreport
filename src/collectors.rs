@@ -201,23 +201,24 @@ impl Collector for EnvironmentVariables {
 
 pub struct CommandOutput<'a> {
     title: &'a str,
-    cmd: &'a OsStr,
-    cmd_args: Vec<&'a OsStr>,
+    cmd: OsString,
+    cmd_args: Vec<OsString>,
 }
 
 impl<'a> CommandOutput<'a> {
-    pub fn new<S>(title: &'a str, cmd: &'a OsStr, args: &'a [S]) -> Self
+    pub fn new<S, T>(title: &'a str, cmd: T, args: &[S]) -> Self
     where
-        S: AsRef<OsStr> + 'a,
+        T: AsRef<OsStr>,
+        S: AsRef<OsStr>,
     {
-        let mut cmd_args = Vec::new();
+        let mut cmd_args: Vec<OsString> = Vec::new();
         for a in args {
-            cmd_args.push(a.as_ref());
+            cmd_args.push(a.into());
         }
 
         CommandOutput {
             title,
-            cmd,
+            cmd: cmd.as_ref().to_owned(),
             cmd_args,
         }
     }
@@ -241,7 +242,7 @@ impl<'a> Collector for CommandOutput<'a> {
 
         result += "\n";
 
-        let output = Command::new(self.cmd)
+        let output = Command::new(&self.cmd)
             .args(&self.cmd_args)
             .output()
             .map_err(|_| CollectionError::CouldNotRetrieve("TODO".into()))?;
