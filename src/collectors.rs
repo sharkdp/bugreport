@@ -89,6 +89,14 @@ impl Collector for CompileTimeInformation {
                 consts::FAMILY,
                 consts::OS
             ))),
+            Box::new(ReportEntry::Text(format!(
+                "Target triple: {}",
+                env!("BUGREPORT_TARGET")
+            ))),
+            Box::new(ReportEntry::Text(format!(
+                "Profile: {}",
+                env!("BUGREPORT_PROFILE")
+            ))),
         ]))
     }
 }
