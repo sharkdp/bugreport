@@ -11,18 +11,23 @@ report (similar to `git bugreport` or `ffmpeg … -report`).
 
 ## Example
 
+The following code
 ```rust
 use bugreport::{bugreport, collectors::*};
 
 fn main() {
     bugreport!()
-        .info(OperatingSystem::default())
         .info(SoftwareVersion::default())
+        .info(OperatingSystem::default())
         .info(CommandLine::default())
-        .info(EnvironmentVariables::list(&["SHELL", "PATH"]))
+        .info(EnvironmentVariables::list(&["SHELL", "EDITOR"]))
+        .info(CommandOutput::new("Python version", "python", &["--version"]))
+        .info(CompileTimeInformation::default())
         .print_markdown();
 }
 ```
+generates bug report information that [looks like this](example-report.md).
+
 
 ## Collectors
 
