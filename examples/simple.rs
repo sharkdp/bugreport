@@ -3,7 +3,6 @@ use bugreport::{bugreport, collectors::*};
 fn main() {
     bugreport!()
         .info(SoftwareVersion::default())
-        .info(CompileTimeInformation::default())
         .info(OperatingSystem::default())
         .info(CommandLine::default())
         .info(EnvironmentVariables::list(&[
@@ -18,5 +17,6 @@ fn main() {
             &["-a"],
         ))
         .info(FileContent::new("Load average", "/proc/loadavg"))
+        .info(CompileTimeInformation::default())
         .print_markdown();
 }

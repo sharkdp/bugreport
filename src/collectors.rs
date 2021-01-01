@@ -1,4 +1,3 @@
-use std::env::consts;
 use std::ffi::{OsStr, OsString};
 use std::fs;
 use std::ops::Deref;
@@ -80,14 +79,30 @@ impl Collector for CompileTimeInformation {
 
     fn collect(&mut self, _: &CrateInfo) -> Result<ReportEntry> {
         Ok(ReportEntry::List(vec![
-            ReportEntry::Text(format!("Target: {}", env!("BUGREPORT_TARGET"))),
             ReportEntry::Text(format!("Profile: {}", env!("BUGREPORT_PROFILE"))),
+            ReportEntry::Text(format!("Target triple: {}", env!("BUGREPORT_TARGET"))),
             ReportEntry::Text(format!(
-                "Host (family, OS, arch): {}, {}, {}",
-                consts::FAMILY,
-                consts::OS,
-                consts::ARCH
+                "Family: {}",
+                env!("BUGREPORT_CARGO_CFG_TARGET_FAMILY")
             )),
+            ReportEntry::Text(format!("OS: {}", env!("BUGREPORT_CARGO_CFG_TARGET_OS"))),
+            ReportEntry::Text(format!(
+                "Architecture: {}",
+                env!("BUGREPORT_CARGO_CFG_TARGET_ARCH")
+            )),
+            ReportEntry::Text(format!(
+                "Pointer width: {}",
+                env!("BUGREPORT_CARGO_CFG_TARGET_POINTER_WIDTH")
+            )),
+            ReportEntry::Text(format!(
+                "Endian: {}",
+                env!("BUGREPORT_CARGO_CFG_TARGET_ENDIAN")
+            )),
+            ReportEntry::Text(format!(
+                "CPU features: {}",
+                env!("BUGREPORT_CARGO_CFG_TARGET_FEATURE")
+            )),
+            ReportEntry::Text(format!("Host: {}", env!("BUGREPORT_HOST"))),
         ]))
     }
 }

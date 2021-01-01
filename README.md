@@ -24,28 +24,27 @@ fn main() {
 }
 ```
 
-## Features
-
-- [x] Markdown export
-- [ ] Ask user for consent
-- [ ] Automatic anonymization of information? (e.g.: remove `/home/username` from paths)
-- [ ] Open report output in editor (instead of printing to stdout)
-- [ ] Auto-detect command-line option or environment variable (like `--diagnostic`)
-- [ ] JSON export (?)
-
 ## Collectors
 
-- [x] Software version
+- [x] Crate information (name and version)
 - [x] Operating system (type, name, version)
-- [ ] CPU architecture
 - [x] Command line (including all arguments)
-- [x] Environment variables
+- [x] Environment variables (e.g. `SHELL`, `PATH`, …)
 - [x] File contents (e.g. config files)
-- [x] Run command (e.g. `less --version`)
-- [x] Compile time information (architecture, target, profile, time, git commit)
+- [x] Command output (e.g. `bash --version`)
+- [x] Compile time information (profile, target, architecture, cpu features, etc.)
 - [ ] Current working directory
 - [ ] Date and time
 - [x] User defined collectors
+
+## Features
+
+- [x] Markdown export
+- [ ] Auto-detect `--diagnostic` command-line option or environment variable (like `--diagnostic`)
+- [ ] Open report output in editor (instead of printing to stdout, see `git bugreport`)
+- [ ] Ask user for permission to gather information?
+- [ ] Automatic anonymization of information? (e.g.: remove `/home/username` from paths)
+- [ ] JSON export (?)
 
 ## Use cases / prior art
 
