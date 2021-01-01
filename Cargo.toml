@@ -14,7 +14,7 @@ keywords = [
 license = "MIT/Apache-2.0"
 authors = ["David Peter <mail@david-peter.de>"]
 edition = "2018"
-version = "0.1.0"
+version = "0.2.0"
 
 [dependencies]
 sys-info = "0.7"
