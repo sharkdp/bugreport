@@ -80,23 +80,14 @@ impl Collector for CompileTimeInformation {
 
     fn collect(&mut self, _: &CrateInfo) -> Result<ReportEntry> {
         Ok(ReportEntry::List(vec![
-            Box::new(ReportEntry::Text(format!(
-                "CPU architecture: {}",
-                consts::ARCH
-            ))),
-            Box::new(ReportEntry::Text(format!(
+            ReportEntry::Text(format!("CPU architecture: {}", consts::ARCH)),
+            ReportEntry::Text(format!(
                 "Operating system (family, type): {}, {}",
                 consts::FAMILY,
                 consts::OS
-            ))),
-            Box::new(ReportEntry::Text(format!(
-                "Target triple: {}",
-                env!("BUGREPORT_TARGET")
-            ))),
-            Box::new(ReportEntry::Text(format!(
-                "Profile: {}",
-                env!("BUGREPORT_PROFILE")
-            ))),
+            )),
+            ReportEntry::Text(format!("Target triple: {}", env!("BUGREPORT_TARGET"))),
+            ReportEntry::Text(format!("Profile: {}", env!("BUGREPORT_PROFILE"))),
         ]))
     }
 }

@@ -8,7 +8,7 @@ pub struct Code {
 pub enum ReportEntry {
     Text(String),
     Code(Code),
-    List(Vec<Box<ReportEntry>>),
+    List(Vec<ReportEntry>),
 }
 
 #[derive(Debug)]
