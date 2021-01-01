@@ -57,7 +57,7 @@ impl<'a> Report<'a> {
     pub fn to_markdown(&self) -> String {
         let mut result = String::new();
         for section in &self.sections {
-            result += &format!("## {}\n\n", section.title);
+            result += &format!("#### {}\n\n", section.title);
             result += &section.entry.to_markdown();
             result += "\n";
         }

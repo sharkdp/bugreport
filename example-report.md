@@ -1,32 +1,32 @@
-## Software version
+#### Software version
 
-bugreport 0.1.0
+bugreport 0.2.0
 
-## Operating system
+#### Operating system
 
 Linux 5.9.14-arch1-1
 
-## Command-line
+#### Command-line
 
 ```bash
-/home/shark/.cargo-target/debug/examples/readme 'test argument' two three
+/home/shark/.cargo-target/debug/examples/readme "'test value' on command line" two three
 ```
 
-## Environment variables
+#### Environment variables
 
 ```bash
 SHELL=/usr/bin/zsh
 EDITOR=vim
 ```
 
-## Python version
+#### Python
 
 ```
 > python --version
 Python 3.9.1
 ```
 
-## Compile time information
+#### Compile time information
 
 - Profile: debug
 - Target triple: x86_64-unknown-linux-gnu
