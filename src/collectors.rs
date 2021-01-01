@@ -1,5 +1,7 @@
 use std::ffi::{OsStr, OsString};
+use std::fs;
 use std::ops::Deref;
+use std::path::{Path, PathBuf};
 use std::process::Command;
 
 use sys_info::{os_release, os_type};
@@ -208,6 +210,36 @@ impl<'a> Collector for CommandOutput<'a> {
 
         // trim in place
         result.truncate(result.trim_end().len());
+
+        Ok(ReportEntry::Code(Code {
+            language: None,
+            code: result,
+        }))
+    }
+}
+
+pub struct FileContent<'a> {
+    title: &'a str,
+    path: PathBuf,
+}
+
+impl<'a> FileContent<'a> {
+    pub fn new<P: AsRef<Path>>(title: &'a str, path: P) -> Self {
+        Self {
+            title,
+            path: path.as_ref().to_path_buf(),
+        }
+    }
+}
+
+impl<'a> Collector for FileContent<'a> {
+    fn description(&self) -> &str {
+        self.title
+    }
+
+    fn collect(&mut self, _: &CrateInfo) -> Result<ReportEntry> {
+        let result = fs::read_to_string(&self.path)
+            .map_err(|_| CollectionError::CouldNotRetrieve("TODO".into()))?;
 
         Ok(ReportEntry::Code(Code {
             language: None,

@@ -39,7 +39,7 @@ fn main() {
 - [ ] CPU architecture
 - [x] Command line (including all arguments)
 - [x] Environment variables
-- [ ] File contents (e.g. config files)
+- [x] File contents (e.g. config files)
 - [x] Run command (e.g. `less --version`)
 - [ ] Compile time information (architecture, OS, time, git commit)
 - [ ] Current working directory

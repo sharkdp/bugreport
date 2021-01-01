@@ -16,5 +16,6 @@ fn main() {
             std::ffi::OsStr::new("uname"),
             &["-a"],
         ))
+        .info(FileContent::new("Load average", "/proc/loadavg"))
         .print_markdown();
 }
