@@ -42,7 +42,7 @@ fn main() {
 - [x] Environment variables
 - [x] File contents (e.g. config files)
 - [x] Run command (e.g. `less --version`)
-- [ ] Compile time information (architecture, OS, time, git commit)
+- [x] Compile time information (architecture, OS, time, git commit)
 - [ ] Current working directory
 - [ ] Date and time
 - [x] User defined collectors

@@ -8,6 +8,7 @@ pub struct Code {
 pub enum ReportEntry {
     Text(String),
     Code(Code),
+    List(Vec<Box<ReportEntry>>),
 }
 
 #[derive(Debug)]
@@ -27,6 +28,14 @@ impl ReportEntry {
                 c.language.as_deref().unwrap_or(""),
                 c.code
             ),
+            List(entries) => {
+                let mut result = String::new();
+                for entry in entries {
+                    result += "- ";
+                    result += &entry.to_markdown();
+                }
+                result
+            }
         }
     }
 }

@@ -3,6 +3,7 @@ use bugreport::{bugreport, collectors::*};
 fn main() {
     bugreport!()
         .info(SoftwareVersion::default())
+        .info(CompileTimeInformation::default())
         .info(OperatingSystem::default())
         .info(CommandLine::default())
         .info(EnvironmentVariables::list(&[

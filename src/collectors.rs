@@ -1,3 +1,4 @@
+use std::env::consts;
 use std::ffi::{OsStr, OsString};
 use std::fs;
 use std::ops::Deref;
@@ -61,6 +62,34 @@ impl Collector for SoftwareVersion {
             crate_info.pkg_name,
             self.version.as_deref().unwrap_or(&crate_info.pkg_version)
         )))
+    }
+}
+
+pub struct CompileTimeInformation {}
+
+impl Default for CompileTimeInformation {
+    fn default() -> Self {
+        Self {}
+    }
+}
+
+impl Collector for CompileTimeInformation {
+    fn description(&self) -> &str {
+        "Compile time information"
+    }
+
+    fn collect(&mut self, _: &CrateInfo) -> Result<ReportEntry> {
+        Ok(ReportEntry::List(vec![
+            Box::new(ReportEntry::Text(format!(
+                "CPU architecture: {}",
+                consts::ARCH
+            ))),
+            Box::new(ReportEntry::Text(format!(
+                "Operating system (family, type): {}, {}",
+                consts::FAMILY,
+                consts::OS
+            ))),
+        ]))
     }
 }
 
