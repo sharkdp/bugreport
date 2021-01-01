@@ -9,6 +9,7 @@ pub enum ReportEntry {
     Text(String),
     Code(Code),
     List(Vec<ReportEntry>),
+    Concat(Vec<ReportEntry>),
 }
 
 #[derive(Debug)]
@@ -32,6 +33,13 @@ impl ReportEntry {
                 let mut result = String::new();
                 for entry in entries {
                     result += "- ";
+                    result += &entry.to_markdown();
+                }
+                result
+            }
+            Concat(entries) => {
+                let mut result = String::new();
+                for entry in entries {
                     result += &entry.to_markdown();
                 }
                 result

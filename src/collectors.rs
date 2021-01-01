@@ -245,20 +245,46 @@ impl<'a> Collector for CommandOutput<'a> {
         let output = Command::new(&self.cmd)
             .args(&self.cmd_args)
             .output()
-            .map_err(|_| CollectionError::CouldNotRetrieve("TODO".into()))?;
+            .map_err(|e| {
+                CollectionError::CouldNotRetrieve(format!(
+                    "Could not run command '{}': {}",
+                    self.cmd.to_string_lossy(),
+                    e
+                ))
+            })?;
 
-        // TODO: stderr, exit code
-        let stdout = String::from_utf8(output.stdout)
-            .map_err(|_| CollectionError::CouldNotRetrieve("TODO".into()))?;
+        let utf8_decoding_error = |_| {
+            CollectionError::CouldNotRetrieve(format!(
+                "Error while running command '{}': output is not valid UTF-8.",
+                self.cmd.to_string_lossy()
+            ))
+        };
+
+        let stdout = String::from_utf8(output.stdout).map_err(utf8_decoding_error)?;
+        let stderr = String::from_utf8(output.stderr).map_err(utf8_decoding_error)?;
 
         result += &stdout;
+        result += &stderr;
 
         result.trim_end_inplace();
 
-        Ok(ReportEntry::Code(Code {
+        let mut concat = vec![];
+        concat.push(ReportEntry::Code(Code {
             language: None,
             code: result,
-        }))
+        }));
+
+        if !output.status.success() {
+            concat.push(ReportEntry::Text(format!(
+                "Command failed{}.",
+                output
+                    .status
+                    .code()
+                    .map_or("".into(), |c| format!(" with exit code {}", c))
+            )));
+        }
+
+        Ok(ReportEntry::Concat(concat))
     }
 }
 
