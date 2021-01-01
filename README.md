@@ -1,6 +1,6 @@
 # bugreport
 
-![Continuous integration](https://github.com/sharkdp/bugreport/workflows/Build/badge.svg) [![Crates.io](https://img.shields.io/crates/v/bugreport.svg)](https://crates.io/crates/bugreport)
+[![Continuous integration](https://github.com/sharkdp/bugreport/workflows/Build/badge.svg)](https://github.com/sharkdp/bugreport/actions) [![Crates.io](https://img.shields.io/crates/v/bugreport.svg)](https://crates.io/crates/bugreport)
 [![Documentation](https://docs.rs/bugreport/badge.svg)](https://docs.rs/bugreport)
 
 `bugreport` is a Rust library that helps application developers to automatically collect
