@@ -1,3 +1,5 @@
+//! Contains all builtin information collectors.
+
 use std::ffi::{OsStr, OsString};
 use std::fs;
 use std::ops::Deref;

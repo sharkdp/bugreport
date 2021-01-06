@@ -1,6 +1,6 @@
 #### Software version
 
-bugreport 0.2.0
+bugreport 0.2.1
 
 #### Operating system
 
@@ -9,7 +9,7 @@ Linux 5.9.14-arch1-1
 #### Command-line
 
 ```bash
-/home/shark/.cargo-target/debug/examples/readme "'test value' on command line" two three
+/home/shark/.cargo-target/debug/examples/readme "'test value' on command line" two three 
 ```
 
 #### Environment variables
@@ -22,7 +22,7 @@ EDITOR=vim
 #### Python
 
 ```
-> python --version
+> python --version 
 Python 3.9.1
 ```
 
@@ -37,3 +37,5 @@ Python 3.9.1
 - Endian: little
 - CPU features: fxsr,sse,sse2
 - Host: x86_64-unknown-linux-gnu
+
+

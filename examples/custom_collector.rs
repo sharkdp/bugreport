@@ -1,4 +1,6 @@
-use bugreport::{bugreport, collectors::*, report::ReportEntry, CrateInfo, Result};
+use std::result::Result;
+
+use bugreport::{bugreport, collectors::*, report::ReportEntry, CrateInfo};
 
 struct MyCollector {}
 
@@ -7,7 +9,7 @@ impl Collector for MyCollector {
         "My collector"
     }
 
-    fn collect(&mut self, _: &CrateInfo) -> Result<ReportEntry> {
+    fn collect(&mut self, _: &CrateInfo) -> Result<ReportEntry, CollectionError> {
         Ok(ReportEntry::Text("custom info".into()))
     }
 }
