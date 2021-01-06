@@ -13,7 +13,7 @@ report (similar to `git bugreport` or `ffmpeg … -report`).
 
 The following code
 ```rust
-use bugreport::{bugreport, collectors::*};
+use bugreport::{bugreport, collector::*, format::markdown::Markdown};
 
 fn main() {
     bugreport!()
@@ -21,9 +21,9 @@ fn main() {
         .info(OperatingSystem::default())
         .info(CommandLine::default())
         .info(EnvironmentVariables::list(&["SHELL", "EDITOR"]))
-        .info(CommandOutput::new("Python version", "python", &["--version"]))
+        .info(CommandOutput::new("Python version", "python", &["-V"]))
         .info(CompileTimeInformation::default())
-        .print_markdown();
+        .print::<Markdown>();
 }
 ```
 generates bug report information that [looks like this](example-report.md).

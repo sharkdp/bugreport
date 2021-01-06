@@ -1,4 +1,6 @@
-//! The document structure of the report. Only needed for custom collectors.
+//! Defines the document structure of the report. Only needed for custom collectors.
+
+use crate::format::Format;
 
 #[derive(Debug)]
 pub struct Code {
@@ -20,35 +22,7 @@ pub(crate) struct ReportSection<'a> {
     pub(crate) entry: ReportEntry,
 }
 
-impl ReportEntry {
-    fn to_markdown(&self) -> String {
-        use ReportEntry::*;
-
-        match self {
-            Text(content) => format!("{}\n", content),
-            Code(c) => format!(
-                "```{}\n{}\n```\n",
-                c.language.as_deref().unwrap_or(""),
-                c.code
-            ),
-            List(entries) => {
-                let mut result = String::new();
-                for entry in entries {
-                    result += "- ";
-                    result += &entry.to_markdown();
-                }
-                result
-            }
-            Concat(entries) => {
-                let mut result = String::new();
-                for entry in entries {
-                    result += &entry.to_markdown();
-                }
-                result
-            }
-        }
-    }
-}
+impl ReportEntry {}
 
 #[derive(Debug)]
 pub(crate) struct Report<'a> {
@@ -56,11 +30,11 @@ pub(crate) struct Report<'a> {
 }
 
 impl<'a> Report<'a> {
-    pub fn to_markdown(&self) -> String {
+    pub fn format_as(&self, format: &mut impl Format) -> String {
         let mut result = String::new();
         for section in &self.sections {
-            result += &format!("#### {}\n\n", section.title);
-            result += &section.entry.to_markdown();
+            result += &format.format_section(section.title);
+            result += &format.format_entry(&section.entry);
             result += "\n";
         }
 

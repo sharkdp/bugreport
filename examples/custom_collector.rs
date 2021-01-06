@@ -1,6 +1,8 @@
 use std::result::Result;
 
-use bugreport::{bugreport, collector::*, report::ReportEntry, CrateInfo};
+use bugreport::{
+    bugreport, collector::*, format::markdown::Markdown, report::ReportEntry, CrateInfo,
+};
 
 struct MyCollector {}
 
@@ -18,5 +20,5 @@ fn main() {
     bugreport!()
         .info(SoftwareVersion::default())
         .info(MyCollector {})
-        .print_markdown();
+        .print::<Markdown>();
 }

@@ -1,4 +1,4 @@
-use bugreport::{bugreport, collector::*};
+use bugreport::{bugreport, collector::*, format::markdown::Markdown};
 
 fn main() {
     bugreport!()
@@ -14,5 +14,5 @@ fn main() {
         .info(CommandOutput::new("System information", "uname", &["-a"]))
         .info(FileContent::new("Load average", "/proc/loadavg"))
         .info(CompileTimeInformation::default())
-        .print_markdown();
+        .print::<Markdown>();
 }
