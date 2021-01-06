@@ -1,3 +1,23 @@
+//! [`bugreport`] is a Rust library that helps application developers to automatically collect
+//! information about the system and the environment that users can send along with a bug
+//! report (similar to `git bugreport` or `ffmpeg … -report`).
+//!
+//! Usage example:
+//! ```
+//! use bugreport::{bugreport, collectors::*};
+//!
+//! fn main() {
+//!     bugreport!()
+//!         .info(SoftwareVersion::default())
+//!         .info(OperatingSystem::default())
+//!         .info(CommandLine::default())
+//!         .info(EnvironmentVariables::list(&["SHELL", "EDITOR"]))
+//!         .info(CommandOutput::new("Python version", "python", &["--version"]))
+//!         .info(CompileTimeInformation::default())
+//!         .print_markdown();
+//! }
+//! ```
+
 use std::result;
 
 pub mod collectors;

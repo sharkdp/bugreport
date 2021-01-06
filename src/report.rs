@@ -1,3 +1,5 @@
+//! The document structure of the report. Only needed for custom collectors.
+
 #[derive(Debug)]
 pub struct Code {
     pub language: Option<String>,

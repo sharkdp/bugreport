@@ -1,4 +1,4 @@
-//! Contains all builtin information collectors.
+//! Contains all builtin information collectors and the [`Collector`] trait to implement your own.
 
 use std::ffi::{OsStr, OsString};
 use std::fs;
@@ -14,6 +14,7 @@ use super::Result;
 use crate::helper::StringExt;
 use crate::report::{Code, ReportEntry};
 
+/// Error that appeared while collecting bug report information.
 #[derive(Debug)]
 pub enum CollectionError {
     CouldNotRetrieve(String),
@@ -29,11 +30,13 @@ impl CollectionError {
     }
 }
 
+/// Implement this trait to define customized information collectors.
 pub trait Collector {
     fn description(&self) -> &str;
     fn collect(&mut self, crate_info: &CrateInfo) -> Result<ReportEntry>;
 }
 
+/// The name of your crate and the current version.
 pub struct SoftwareVersion {
     version: Option<String>,
 }
@@ -66,6 +69,7 @@ impl Collector for SoftwareVersion {
     }
 }
 
+/// Compile-time information such as the profile (release/debug) and the target triple.
 pub struct CompileTimeInformation {}
 
 impl Default for CompileTimeInformation {
@@ -109,6 +113,7 @@ impl Collector for CompileTimeInformation {
     }
 }
 
+/// The full command-line: executable name and arguments to the program.
 pub struct CommandLine {}
 
 impl Default for CommandLine {
@@ -137,6 +142,7 @@ impl Collector for CommandLine {
     }
 }
 
+/// The operating system (type and version).
 pub struct OperatingSystem {}
 
 impl Default for OperatingSystem {
@@ -162,6 +168,7 @@ impl Collector for OperatingSystem {
     }
 }
 
+/// The values of the specified environment variables (if set).
 pub struct EnvironmentVariables {
     list: Vec<OsString>,
 }
@@ -201,6 +208,7 @@ impl Collector for EnvironmentVariables {
     }
 }
 
+/// The stdout and stderr output (+ exit code) of a custom command.
 pub struct CommandOutput<'a> {
     title: &'a str,
     cmd: OsString,
@@ -290,6 +298,7 @@ impl<'a> Collector for CommandOutput<'a> {
     }
 }
 
+/// The full content of a text file.
 pub struct FileContent<'a> {
     title: &'a str,
     path: PathBuf,
