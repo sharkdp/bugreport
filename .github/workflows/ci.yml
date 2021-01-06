@@ -42,6 +42,16 @@ jobs:
         name: "cargo test"
         with:
           command: test
+      - uses: actions-rs/cargo@v1
+        name: "cargo test (no default features)"
+        with:
+          command: test
+          args: --tests --no-default-features
+      - uses: actions-rs/cargo@v1
+        name: "cargo test (all features)"
+        with:
+          command: test
+          args: --all-features
 
   run:
     name: Run examples

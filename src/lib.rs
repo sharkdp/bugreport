@@ -102,12 +102,11 @@ macro_rules! bugreport {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-    use crate::collector::*;
-
     #[test]
     #[cfg(feature = "format_markdown")]
     fn basic() {
+        use super::BugReport;
+        use crate::collector::*;
         use crate::format::Markdown;
 
         std::env::set_var("BUGREPORT_TEST", "42");

@@ -17,10 +17,13 @@ edition = "2018"
 version = "0.3.0"
 
 [features]
-default = ["format_markdown"]
+default = ["collector_operating_system", "format_markdown"]
+
+collector_operating_system = ["sys-info"]
+
 format_markdown = []
 format_plaintext = []
 
 [dependencies]
-sys-info = "0.7"
+sys-info = { version = "0.7", optional = true }
 snailquote = "0.3"

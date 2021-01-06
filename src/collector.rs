@@ -2,11 +2,8 @@
 
 use std::ffi::{OsStr, OsString};
 use std::fs;
-use std::ops::Deref;
 use std::path::{Path, PathBuf};
 use std::process::Command;
-
-use sys_info::{os_release, os_type};
 
 use super::CrateInfo;
 use super::Result;
@@ -143,20 +140,26 @@ impl Collector for CommandLine {
 }
 
 /// The operating system (type and version).
+#[cfg(feature = "collector_operating_system")]
 pub struct OperatingSystem {}
 
+#[cfg(feature = "collector_operating_system")]
 impl Default for OperatingSystem {
     fn default() -> Self {
         Self {}
     }
 }
 
+#[cfg(feature = "collector_operating_system")]
 impl Collector for OperatingSystem {
     fn description(&self) -> &str {
         "Operating system"
     }
 
     fn collect(&mut self, _: &CrateInfo) -> Result<ReportEntry> {
+        use std::ops::Deref;
+        use sys_info::{os_release, os_type};
+
         let os_type = os_type()
             .map_err(|_| CollectionError::CouldNotRetrieve("Operating system type".into()))?;
         let os_release = os_release();
