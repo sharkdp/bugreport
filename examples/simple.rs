@@ -1,4 +1,4 @@
-use bugreport::{bugreport, collector::*, format::markdown::Markdown};
+use bugreport::{bugreport, collector::*, format::Markdown};
 
 fn main() {
     bugreport!()

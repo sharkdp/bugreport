@@ -3,9 +3,14 @@
 use crate::report::ReportEntry;
 
 #[cfg(feature = "format_markdown")]
-pub mod markdown;
+mod markdown;
 #[cfg(feature = "format_plaintext")]
-pub mod plaintext;
+mod plaintext;
+
+#[cfg(feature = "format_markdown")]
+pub use markdown::Markdown;
+#[cfg(feature = "format_plaintext")]
+pub use plaintext::Plaintext;
 
 pub trait Format: Default {
     fn format_section(&mut self, title: &str) -> String;

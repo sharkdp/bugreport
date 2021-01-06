@@ -7,13 +7,13 @@
 information about the system and the environment that users can send along with a bug
 report (similar to `git bugreport` or `ffmpeg … -report`).
 
-**Note**: This library is in an early stage and the API is very likely to change.
+**Note**: This library is in an early stage and the API may change in the future.
 
 ## Example
 
 The following code
 ```rust
-use bugreport::{bugreport, collector::*, format::markdown::Markdown};
+use bugreport::{bugreport, collector::*, format::Markdown};
 
 fn main() {
     bugreport!()

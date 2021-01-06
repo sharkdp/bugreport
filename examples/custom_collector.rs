@@ -1,8 +1,6 @@
 use std::result::Result;
 
-use bugreport::{
-    bugreport, collector::*, format::markdown::Markdown, report::ReportEntry, CrateInfo,
-};
+use bugreport::{bugreport, collector::*, format::Markdown, report::ReportEntry, CrateInfo};
 
 struct MyCollector {}
 

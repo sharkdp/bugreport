@@ -4,7 +4,7 @@
 //!
 //! Usage example:
 //! ```
-//! use bugreport::{bugreport, collector::*, format::markdown::Markdown};
+//! use bugreport::{bugreport, collector::*, format::Markdown};
 //!
 //! bugreport!()
 //!     .info(SoftwareVersion::default())
@@ -98,4 +98,31 @@ macro_rules! bugreport {
             env!("CARGO_PKG_VERSION"),
         )
     };
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::collector::*;
+
+    #[test]
+    #[cfg(feature = "format_markdown")]
+    fn basic() {
+        use crate::format::Markdown;
+
+        std::env::set_var("BUGREPORT_TEST", "42");
+
+        let report = BugReport::from_name_and_version("dummy", "0.1")
+            .info(EnvironmentVariables::list(&["BUGREPORT_TEST"]))
+            .format::<Markdown>();
+
+        assert_eq!(
+            report,
+            "#### Environment variables\n\
+             \n\
+             ```bash\n\
+             BUGREPORT_TEST=42\n\
+             ```\n\n"
+        );
+    }
 }
