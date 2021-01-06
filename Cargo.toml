@@ -16,6 +16,11 @@ authors = ["David Peter <mail@david-peter.de>"]
 edition = "2018"
 version = "0.3.0"
 
+[features]
+default = ["format_markdown"]
+format_markdown = []
+format_plaintext = []
+
 [dependencies]
 sys-info = "0.7"
 snailquote = "0.3"
