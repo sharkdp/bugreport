@@ -6,16 +6,14 @@
 //! ```
 //! use bugreport::{bugreport, collectors::*};
 //!
-//! fn main() {
-//!     bugreport!()
-//!         .info(SoftwareVersion::default())
-//!         .info(OperatingSystem::default())
-//!         .info(CommandLine::default())
-//!         .info(EnvironmentVariables::list(&["SHELL", "EDITOR"]))
-//!         .info(CommandOutput::new("Python version", "python", &["--version"]))
-//!         .info(CompileTimeInformation::default())
-//!         .print_markdown();
-//! }
+//! bugreport!()
+//!     .info(SoftwareVersion::default())
+//!     .info(OperatingSystem::default())
+//!     .info(CommandLine::default())
+//!     .info(EnvironmentVariables::list(&["SHELL", "EDITOR"]))
+//!     .info(CommandOutput::new("Python version", "python", &["--version"]))
+//!     .info(CompileTimeInformation::default())
+//!     .print_markdown();
 //! ```
 
 use std::result;
@@ -76,13 +74,13 @@ impl<'a> BugReport<'a> {
     }
 
     /// Generate the bug report information as Markdown.
-    pub fn to_markdown(&mut self) -> String {
+    pub fn format_markdown(&mut self) -> String {
         self.generate().to_markdown()
     }
 
     /// Print the bug report information as Markdown.
     pub fn print_markdown(&mut self) {
-        println!("{}", self.to_markdown());
+        println!("{}", self.format_markdown());
     }
 }
 
