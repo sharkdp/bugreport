@@ -1,4 +1,4 @@
-use bugreport::{bugreport, collectors::*};
+use bugreport::{bugreport, collector::*};
 
 fn main() {
     bugreport!()

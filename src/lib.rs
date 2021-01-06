@@ -1,10 +1,10 @@
-//! [`bugreport`] is a Rust library that helps application developers to automatically collect
+//! `bugreport` is a library that helps application developers to automatically collect
 //! information about the system and the environment that users can send along with a bug
 //! report (similar to `git bugreport` or `ffmpeg … -report`).
 //!
 //! Usage example:
 //! ```
-//! use bugreport::{bugreport, collectors::*};
+//! use bugreport::{bugreport, collector::*};
 //!
 //! bugreport!()
 //!     .info(SoftwareVersion::default())
@@ -18,11 +18,11 @@
 
 use std::result;
 
-pub mod collectors;
+pub mod collector;
 mod helper;
 pub mod report;
 
-use collectors::{CollectionError, Collector};
+use collector::{CollectionError, Collector};
 use report::{Report, ReportSection};
 
 pub(crate) type Result<T> = result::Result<T, CollectionError>;
@@ -33,7 +33,9 @@ pub struct CrateInfo<'a> {
     pkg_version: &'a str,
 }
 
-/// A builder for the bug report. Use the [`bugreport`] macro to create one.
+/// The main struct for collecting bug report information.
+///
+/// Use the [`bugreport`] macro to create one.
 pub struct BugReport<'a> {
     info: CrateInfo<'a>,
     collectors: Vec<Box<dyn Collector>>,
@@ -41,7 +43,7 @@ pub struct BugReport<'a> {
 
 impl<'a> BugReport<'a> {
     #[doc(hidden)]
-    pub fn new(pkg_name: &'a str, pkg_version: &'a str) -> Self {
+    pub fn from_name_and_version(pkg_name: &'a str, pkg_version: &'a str) -> Self {
         BugReport {
             info: CrateInfo {
                 pkg_name,
@@ -50,6 +52,9 @@ impl<'a> BugReport<'a> {
             collectors: vec![],
         }
     }
+
+    /// Run the bugreport
+    pub fn trigger() {}
 
     /// Add a [`Collector`] to the bug report.
     pub fn info<C: Collector + 'static>(mut self, collector: C) -> Self {
@@ -85,19 +90,12 @@ impl<'a> BugReport<'a> {
 }
 
 /// Generate a new [`BugReport`] object.
-///
-/// Example usage:
-/// ```
-/// use bugreport::{bugreport, collectors::*};
-///
-/// bugreport!()
-///         .info(SoftwareVersion::default())
-///         .print_markdown();
-/// ```
-///
 #[macro_export]
 macro_rules! bugreport {
     () => {
-        bugreport::BugReport::new(env!("CARGO_PKG_NAME"), env!("CARGO_PKG_VERSION"))
+        bugreport::BugReport::from_name_and_version(
+            env!("CARGO_PKG_NAME"),
+            env!("CARGO_PKG_VERSION"),
+        )
     };
 }
