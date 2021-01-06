@@ -12,7 +12,7 @@ impl Collector for MyCollector {
     }
 
     fn collect(&mut self, _: &CrateInfo) -> Result<ReportEntry, CollectionError> {
-        Ok(ReportEntry::Text("custom info".into()))
+        Ok(ReportEntry::Text("custom information".into()))
     }
 }
 

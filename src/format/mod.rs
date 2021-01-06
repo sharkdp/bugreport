@@ -3,6 +3,7 @@
 use crate::report::ReportEntry;
 
 pub mod markdown;
+pub mod plaintext;
 
 pub trait Format: Default {
     fn format_section(&mut self, title: &str) -> String;
