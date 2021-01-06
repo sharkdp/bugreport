@@ -1,6 +1,6 @@
 #### Software version
 
-bugreport 0.2.1
+bugreport 0.3.0
 
 #### Operating system
 
@@ -19,10 +19,10 @@ SHELL=/usr/bin/zsh
 EDITOR=vim
 ```
 
-#### Python
+#### Python version
 
 ```
-> python --version 
+> python -V 
 Python 3.9.1
 ```
 
