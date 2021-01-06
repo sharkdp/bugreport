@@ -7,19 +7,22 @@ pub mod report;
 use collectors::{CollectionError, Collector};
 use report::{Report, ReportSection};
 
-pub type Result<T> = result::Result<T, CollectionError>;
+pub(crate) type Result<T> = result::Result<T, CollectionError>;
 
+#[doc(hidden)]
 pub struct CrateInfo<'a> {
     pkg_name: &'a str,
     pkg_version: &'a str,
 }
 
+/// A builder for the bug report. Use the [`bugreport`] macro to create one.
 pub struct BugReport<'a> {
     info: CrateInfo<'a>,
     collectors: Vec<Box<dyn Collector>>,
 }
 
 impl<'a> BugReport<'a> {
+    #[doc(hidden)]
     pub fn new(pkg_name: &'a str, pkg_version: &'a str) -> Self {
         BugReport {
             info: CrateInfo {
@@ -30,12 +33,13 @@ impl<'a> BugReport<'a> {
         }
     }
 
+    /// Add a [`Collector`] to the bug report.
     pub fn info<C: Collector + 'static>(mut self, collector: C) -> Self {
         self.collectors.push(Box::new(collector));
         self
     }
 
-    pub fn generate(&mut self) -> Report {
+    fn generate(&mut self) -> Report {
         let mut sections = vec![];
 
         for collector in &mut self.collectors {
@@ -51,12 +55,28 @@ impl<'a> BugReport<'a> {
         Report { sections }
     }
 
+    /// Generate the bug report information as Markdown.
+    pub fn to_markdown(&mut self) -> String {
+        self.generate().to_markdown()
+    }
+
+    /// Print the bug report information as Markdown.
     pub fn print_markdown(&mut self) {
-        let report = self.generate();
-        print!("{}", report.to_markdown());
+        println!("{}", self.to_markdown());
     }
 }
 
+/// Generate a new [`BugReport`] object.
+///
+/// Example usage:
+/// ```
+/// use bugreport::{bugreport, collectors::*};
+///
+/// bugreport!()
+///         .info(SoftwareVersion::default())
+///         .print_markdown();
+/// ```
+///
 #[macro_export]
 macro_rules! bugreport {
     () => {

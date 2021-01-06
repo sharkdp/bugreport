@@ -49,7 +49,7 @@ impl ReportEntry {
 }
 
 #[derive(Debug)]
-pub struct Report<'a> {
+pub(crate) struct Report<'a> {
     pub(crate) sections: Vec<ReportSection<'a>>,
 }
 
