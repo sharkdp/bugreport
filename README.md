@@ -45,7 +45,6 @@ generates bug report information that [looks like this](example-report.md).
 ## Features
 
 - [x] Markdown export
-- [ ] Auto-detect `--diagnostic` command-line option or environment variable (like `--diagnostic`)
 - [ ] Open report output in editor (instead of printing to stdout, see `git bugreport`)
 - [ ] Ask user for permission to gather information?
 - [ ] Automatic anonymization of information? (e.g.: remove `/home/username` from paths)
