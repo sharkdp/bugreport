@@ -1,4 +1,4 @@
-// Update the code example in README.md whenver this example is changed.
+// Update the code example in README.md whenever this example is changed.
 
 use bugreport::{bugreport, collector::*, format::Markdown};
 
