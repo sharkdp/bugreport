@@ -27,6 +27,6 @@ format_markdown = []
 format_plaintext = []
 
 [dependencies]
-sys-info = { version = "0.7", optional = true }
+sys-info = { version = "0.9", optional = true }
 git-version = { version = "0.3", optional = true }
 snailquote = "0.3"
