@@ -103,6 +103,12 @@ jobs:
           command: run
           args: --target ${{ matrix.job.target }} --example=simple -- "'test value' on command line" "two" "three"
       - uses: actions-rs/cargo@v1
+        name: "example 'simple' without git_hash feature"
+        with:
+          use-cross: ${{ matrix.job.use-cross }}
+          command: run
+          args: --target ${{ matrix.job.target }} --example=simple --no-default-features --features collector_operating_system,format_markdown
+      - uses: actions-rs/cargo@v1
         name: "example 'custom_collector'"
         with:
           use-cross: ${{ matrix.job.use-cross }}

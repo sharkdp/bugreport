@@ -33,6 +33,8 @@ pub(crate) type Result<T> = result::Result<T, CollectionError>;
 pub struct CrateInfo<'a> {
     pkg_name: &'a str,
     pkg_version: &'a str,
+    #[cfg(feature = "git_hash")]
+    git_hash: &'a str,
 }
 
 /// The main struct for collecting bug report information.
@@ -45,11 +47,17 @@ pub struct BugReport<'a> {
 
 impl<'a> BugReport<'a> {
     #[doc(hidden)]
-    pub fn from_name_and_version(pkg_name: &'a str, pkg_version: &'a str) -> Self {
+    pub fn from_name_and_version(
+        pkg_name: &'a str,
+        pkg_version: &'a str,
+        #[cfg(feature = "git_hash")] git_hash: &'a str,
+    ) -> Self {
         BugReport {
             info: CrateInfo {
                 pkg_name,
                 pkg_version,
+                #[cfg(feature = "git_hash")]
+                git_hash,
             },
             collectors: vec![],
         }
@@ -89,8 +97,26 @@ impl<'a> BugReport<'a> {
     }
 }
 
-/// Generate a new [`BugReport`] object.
+/// Re-export so dependent project does not have to manually depend on git-version crate
+#[cfg(feature = "git_hash")]
+pub use git_version::git_version;
+
+#[cfg(feature = "git_hash")]
 #[macro_export]
+/// Generate a new [`BugReport`] object.
+macro_rules! bugreport {
+    () => {
+        bugreport::BugReport::from_name_and_version(
+            env!("CARGO_PKG_NAME"),
+            env!("CARGO_PKG_VERSION"),
+            bugreport::git_version!(fallback = "<no git>"),
+        )
+    };
+}
+
+#[cfg(not(feature = "git_hash"))]
+#[macro_export]
+/// Generate a new [`BugReport`] object.
 macro_rules! bugreport {
     () => {
         bugreport::BugReport::from_name_and_version(
@@ -111,7 +137,7 @@ mod tests {
 
         std::env::set_var("BUGREPORT_TEST", "42");
 
-        let report = BugReport::from_name_and_version("dummy", "0.1")
+        let report = BugReport::from_name_and_version("dummy", "0.1", "<no git>")
             .info(EnvironmentVariables::list(&["BUGREPORT_TEST"]))
             .format::<Markdown>();
 

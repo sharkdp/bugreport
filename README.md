@@ -31,7 +31,7 @@ generates bug report information that [looks like this](example-report.md).
 
 ## Collectors
 
-- [x] Crate information (name and version)
+- [x] Crate information (name, version, git hash)
 - [x] Operating system (type, name, version)
 - [x] Command line (including all arguments)
 - [x] Environment variables (e.g. `SHELL`, `PATH`, …)

@@ -17,13 +17,16 @@ edition = "2018"
 version = "0.3.0"
 
 [features]
-default = ["collector_operating_system", "format_markdown"]
+default = ["collector_operating_system", "git_hash", "format_markdown"]
 
 collector_operating_system = ["sys-info"]
+
+git_hash = ["git-version"]
 
 format_markdown = []
 format_plaintext = []
 
 [dependencies]
 sys-info = { version = "0.7", optional = true }
+git-version = { version = "0.3", optional = true }
 snailquote = "0.3"
