@@ -1,6 +1,6 @@
 #### Software version
 
-bugreport 0.3.0
+bugreport 0.3.0 a984113
 
 #### Operating system
 
