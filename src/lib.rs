@@ -101,29 +101,32 @@ impl<'a> BugReport<'a> {
 pub use git_version::git_version;
 
 #[cfg(feature = "git_hash")]
+#[doc(hidden)]
 #[macro_export]
+macro_rules! bugreport_set_git_hash {
+    ($br:ident) => {
+        $br.set_git_hash(Some(bugreport::git_version!(fallback = "<no git>")));
+    };
+}
+
+#[cfg(not(feature = "git_hash"))]
+#[doc(hidden)]
+#[macro_export]
+macro_rules! bugreport_set_git_hash {
+    ($br:ident) => {};
+}
+
 /// Generate a new [`BugReport`] object.
+#[macro_export]
 macro_rules! bugreport {
     () => {{
         let mut br = bugreport::BugReport::from_name_and_version(
             env!("CARGO_PKG_NAME"),
             env!("CARGO_PKG_VERSION"),
         );
-        br.set_git_hash(Some(bugreport::git_version!(fallback = "<no git>")));
+        bugreport::bugreport_set_git_hash!(br);
         br
     }};
-}
-
-#[cfg(not(feature = "git_hash"))]
-#[macro_export]
-/// Generate a new [`BugReport`] object.
-macro_rules! bugreport {
-    () => {
-        bugreport::BugReport::from_name_and_version(
-            env!("CARGO_PKG_NAME"),
-            env!("CARGO_PKG_VERSION"),
-        )
-    };
 }
 
 #[cfg(test)]
