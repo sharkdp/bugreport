@@ -58,11 +58,10 @@ impl Collector for SoftwareVersion {
     }
 
     fn collect(&mut self, crate_info: &CrateInfo) -> Result<ReportEntry> {
-        #[cfg(feature = "git_hash")]
-        let git_hash_suffix = format!(" ({})", crate_info.git_hash);
-
-        #[cfg(not(feature = "git_hash"))]
-        let git_hash_suffix = "";
+        let git_hash_suffix = match crate_info.git_hash {
+            Some(git_hash) => format!(" ({})", git_hash),
+            None => format!(""),
+        };
 
         Ok(ReportEntry::Text(format!(
             "{} {}{}",
