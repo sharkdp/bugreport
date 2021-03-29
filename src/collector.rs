@@ -59,7 +59,7 @@ impl Collector for SoftwareVersion {
 
     fn collect(&mut self, crate_info: &CrateInfo) -> Result<ReportEntry> {
         #[cfg(feature = "git_hash")]
-        let git_hash_suffix = format!(" {}", crate_info.git_hash);
+        let git_hash_suffix = format!(" ({})", crate_info.git_hash);
 
         #[cfg(not(feature = "git_hash"))]
         let git_hash_suffix = "";
