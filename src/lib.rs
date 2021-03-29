@@ -33,8 +33,7 @@ pub(crate) type Result<T> = result::Result<T, CollectionError>;
 pub struct CrateInfo<'a> {
     pkg_name: &'a str,
     pkg_version: &'a str,
-    #[cfg(feature = "git_hash")]
-    git_hash: &'a str,
+    git_hash: Option<&'a str>,
 }
 
 /// The main struct for collecting bug report information.
@@ -47,20 +46,20 @@ pub struct BugReport<'a> {
 
 impl<'a> BugReport<'a> {
     #[doc(hidden)]
-    pub fn from_name_and_version(
-        pkg_name: &'a str,
-        pkg_version: &'a str,
-        #[cfg(feature = "git_hash")] git_hash: &'a str,
-    ) -> Self {
+    pub fn from_name_and_version(pkg_name: &'a str, pkg_version: &'a str) -> Self {
         BugReport {
             info: CrateInfo {
                 pkg_name,
                 pkg_version,
-                #[cfg(feature = "git_hash")]
-                git_hash,
+                git_hash: None,
             },
             collectors: vec![],
         }
+    }
+
+    #[doc(hidden)]
+    pub fn set_git_hash(&mut self, git_hash: Option<&'a str>) {
+        self.info.git_hash = git_hash;
     }
 
     /// Add a [`Collector`] to the bug report.
@@ -105,13 +104,14 @@ pub use git_version::git_version;
 #[macro_export]
 /// Generate a new [`BugReport`] object.
 macro_rules! bugreport {
-    () => {
-        bugreport::BugReport::from_name_and_version(
+    () => {{
+        let mut br = bugreport::BugReport::from_name_and_version(
             env!("CARGO_PKG_NAME"),
             env!("CARGO_PKG_VERSION"),
-            bugreport::git_version!(fallback = "<no git>"),
-        )
-    };
+        );
+        br.set_git_hash(Some(bugreport::git_version!(fallback = "<no git>")));
+        br
+    }};
 }
 
 #[cfg(not(feature = "git_hash"))]
@@ -137,7 +137,7 @@ mod tests {
 
         std::env::set_var("BUGREPORT_TEST", "42");
 
-        let report = BugReport::from_name_and_version("dummy", "0.1", "<no git>")
+        let report = BugReport::from_name_and_version("dummy", "0.1")
             .info(EnvironmentVariables::list(&["BUGREPORT_TEST"]))
             .format::<Markdown>();
 
