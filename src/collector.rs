@@ -1,5 +1,6 @@
 //! Contains all builtin information collectors and the [`Collector`] trait to implement your own.
 
+use std::borrow::Cow;
 use std::ffi::{OsStr, OsString};
 use std::fs;
 use std::path::{Path, PathBuf};
@@ -134,7 +135,7 @@ impl Collector for CommandLine {
         let mut result = String::new();
 
         for arg in std::env::args_os() {
-            result += &snailquote::escape(&arg.to_string_lossy());
+            result += &shell_escape::escape(arg.to_string_lossy());
             result += " ";
         }
 
@@ -237,7 +238,8 @@ impl Collector for EnvironmentVariables {
 
         for var in &self.list {
             let value = std::env::var_os(&var).map(|value| value.to_string_lossy().into_owned());
-            let value: Option<String> = value.map(|v| snailquote::escape(&v).into());
+            let value: Option<String> =
+                value.map(|v| shell_escape::escape(Cow::Borrowed(&v)).into());
 
             result += &format!(
                 "{}={}\n",
@@ -292,7 +294,7 @@ impl<'a> Collector for CommandOutput<'a> {
         result += &self.cmd.to_string_lossy();
         result += " ";
         for arg in &self.cmd_args {
-            result += &snailquote::escape(&arg.to_string_lossy());
+            result += &shell_escape::escape(arg.to_string_lossy());
             result += " ";
         }
 

@@ -29,4 +29,4 @@ format_plaintext = []
 [dependencies]
 sys-info = { version = "0.9", optional = true }
 git-version = { version = "0.3", optional = true }
-snailquote = "0.3"
+shell-escape = "0.1"
