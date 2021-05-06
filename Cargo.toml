@@ -14,7 +14,7 @@ keywords = [
 license = "MIT/Apache-2.0"
 authors = ["David Peter <mail@david-peter.de>"]
 edition = "2018"
-version = "0.3.0"
+version = "0.4.0"
 
 [features]
 default = ["collector_operating_system", "git_hash", "format_markdown"]
