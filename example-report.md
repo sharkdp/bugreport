@@ -1,15 +1,15 @@
 #### Software version
 
-bugreport 0.3.0 (a984113)
+bugreport 0.4.0 (4687617)
 
 #### Operating system
 
-Linux 5.9.14-arch1-1
+Linux 5.11.14-arch1-1
 
 #### Command-line
 
 ```bash
-/home/shark/.cargo-target/debug/examples/readme "'test value' on command line" two three 
+/home/shark/.cargo-target/debug/examples/readme '"test value" on command line' two three 
 ```
 
 #### Environment variables
@@ -23,7 +23,7 @@ EDITOR=vim
 
 ```
 > python -V 
-Python 3.9.1
+Python 3.9.3
 ```
 
 #### Compile time information
