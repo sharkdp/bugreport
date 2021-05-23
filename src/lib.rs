@@ -104,9 +104,12 @@ pub use git_version::git_version;
 #[doc(hidden)]
 #[macro_export]
 macro_rules! bugreport_set_git_hash {
-    ($br:ident) => {
-        $br.set_git_hash(Some(bugreport::git_version!(fallback = "<no git>")));
-    };
+    ($br:ident) => {{
+        let hash = bugreport::git_version!(fallback = "");
+        if !hash.is_empty() {
+            $br.set_git_hash(Some(hash));
+        }
+    }};
 }
 
 #[cfg(not(feature = "git_hash"))]
