@@ -21,7 +21,7 @@ fn without_git_repo() {
         "bugreport-client-with-git-hash-feature",
         r"#### Software version
 
-bugreport-client-with-git-hash-feature 0\.1\.0 \(<no git>\)
+bugreport-client-with-git-hash-feature 0\.1\.0
 
 
 ",
