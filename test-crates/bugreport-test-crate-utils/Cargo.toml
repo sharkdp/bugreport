@@ -1,0 +1,9 @@
+[package]
+name = "bugreport-test-crate-utils"
+version = "0.1.0"
+authors = ["Martin Nordholts <enselic@gmail.com>"]
+edition = "2018"
+
+[dependencies]
+assert_cmd = "1.0"
+predicates = { version = "1.0", default-features = false, features = ["regex", "normalize-line-endings"] }
