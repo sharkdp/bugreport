@@ -1,0 +1,10 @@
+[package]
+name = "bugreport-client-with-git-hash-feature"
+description = "To test bugreport!() macro evaluation in a separate crate with git_hash."
+version = "0.1.0"
+authors = ["Martin Nordholts <enselic@gmail.com>"]
+edition = "2018"
+
+[dependencies]
+bugreport = { path = "../..", default-features = false, features = ["git_hash", "format_markdown"] }
+bugreport-test-crate-utils = { path = "../bugreport-test-crate-utils" }
