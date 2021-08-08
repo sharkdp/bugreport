@@ -60,3 +60,9 @@ generates bug report information that [looks like this](example-report.md).
   - git version --build-options
 - `grails bugreport`
   - http://docs.grails.org/3.1.1/ref/Command%20Line/bug-report.html
+
+# Related crates
+
+Other crates that might be useful:
+
+- [`human-panic`](https://crates.io/crates/human-panic) - Make panic messages nice for humans to read.
