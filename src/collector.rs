@@ -35,6 +35,7 @@ pub trait Collector {
 }
 
 /// The name of your crate and the current version.
+#[derive(Default)]
 pub struct SoftwareVersion {
     version: Option<String>,
 }
@@ -44,12 +45,6 @@ impl SoftwareVersion {
         Self {
             version: Some(version.as_ref().into()),
         }
-    }
-}
-
-impl Default for SoftwareVersion {
-    fn default() -> Self {
-        Self { version: None }
     }
 }
 
@@ -74,13 +69,8 @@ impl Collector for SoftwareVersion {
 }
 
 /// Compile-time information such as the profile (release/debug) and the target triple.
+#[derive(Default)]
 pub struct CompileTimeInformation {}
-
-impl Default for CompileTimeInformation {
-    fn default() -> Self {
-        Self {}
-    }
-}
 
 impl Collector for CompileTimeInformation {
     fn description(&self) -> &str {
@@ -118,13 +108,8 @@ impl Collector for CompileTimeInformation {
 }
 
 /// The full command-line: executable name and arguments to the program.
+#[derive(Default)]
 pub struct CommandLine {}
-
-impl Default for CommandLine {
-    fn default() -> Self {
-        Self {}
-    }
-}
 
 impl Collector for CommandLine {
     fn description(&self) -> &str {
@@ -148,14 +133,8 @@ impl Collector for CommandLine {
 
 /// The operating system (type and version).
 #[cfg(feature = "collector_operating_system")]
+#[derive(Default)]
 pub struct OperatingSystem {}
-
-#[cfg(feature = "collector_operating_system")]
-impl Default for OperatingSystem {
-    fn default() -> Self {
-        Self {}
-    }
-}
 
 #[cfg(feature = "collector_operating_system")]
 impl Collector for OperatingSystem {
