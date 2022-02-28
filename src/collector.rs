@@ -12,6 +12,9 @@ use super::Result;
 use crate::helper::StringExt;
 use crate::report::{Code, ReportEntry};
 
+mod directory_entries;
+pub use directory_entries::DirectoryEntries;
+
 /// Error that appeared while collecting bug report information.
 #[derive(Debug)]
 pub enum CollectionError {

@@ -36,6 +36,7 @@ generates bug report information that [looks like this](example-report.md).
 - [x] Command line (including all arguments)
 - [x] Environment variables (e.g. `SHELL`, `PATH`, …)
 - [x] File contents (e.g. config files)
+- [x] Directory contents
 - [x] Command output (e.g. `bash --version`)
 - [x] Compile time information (profile, target, architecture, cpu features, etc.)
 - [ ] Current working directory
