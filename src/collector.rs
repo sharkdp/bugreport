@@ -305,11 +305,10 @@ impl<'a> Collector for CommandOutput<'a> {
 
         result.trim_end_inplace();
 
-        let mut concat = vec![];
-        concat.push(ReportEntry::Code(Code {
+        let mut concat = vec![ReportEntry::Code(Code {
             language: None,
             code: result,
-        }));
+        })];
 
         if !output.status.success() {
             concat.push(ReportEntry::Text(format!(
