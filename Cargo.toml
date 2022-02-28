@@ -30,3 +30,7 @@ format_plaintext = []
 sys-info = { version = "0.9", optional = true }
 git-version = { version = "0.3", optional = true }
 shell-escape = "0.1"
+
+[dev-dependencies]
+pretty_assertions = "1.1.0"
+tempfile = "3.3.0"
