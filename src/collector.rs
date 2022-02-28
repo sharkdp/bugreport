@@ -61,13 +61,13 @@ impl Collector for SoftwareVersion {
     fn collect(&mut self, crate_info: &CrateInfo) -> Result<ReportEntry> {
         let git_hash_suffix = match crate_info.git_hash {
             Some(git_hash) => format!(" ({})", git_hash),
-            None => format!(""),
+            None => String::new(),
         };
 
         Ok(ReportEntry::Text(format!(
             "{} {}{}",
             crate_info.pkg_name,
-            self.version.as_deref().unwrap_or(&crate_info.pkg_version),
+            self.version.as_deref().unwrap_or(crate_info.pkg_version),
             git_hash_suffix,
         )))
     }
