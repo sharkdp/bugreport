@@ -38,6 +38,7 @@ pub trait Collector {
 }
 
 /// The name of your crate and the current version.
+#[derive(Default)]
 pub struct SoftwareVersion {
     version: Option<String>,
 }
@@ -50,12 +51,6 @@ impl SoftwareVersion {
     }
 }
 
-impl Default for SoftwareVersion {
-    fn default() -> Self {
-        Self { version: None }
-    }
-}
-
 impl Collector for SoftwareVersion {
     fn description(&self) -> &str {
         "Software version"
@@ -64,26 +59,21 @@ impl Collector for SoftwareVersion {
     fn collect(&mut self, crate_info: &CrateInfo) -> Result<ReportEntry> {
         let git_hash_suffix = match crate_info.git_hash {
             Some(git_hash) => format!(" ({})", git_hash),
-            None => format!(""),
+            None => String::new(),
         };
 
         Ok(ReportEntry::Text(format!(
             "{} {}{}",
             crate_info.pkg_name,
-            self.version.as_deref().unwrap_or(&crate_info.pkg_version),
+            self.version.as_deref().unwrap_or(crate_info.pkg_version),
             git_hash_suffix,
         )))
     }
 }
 
 /// Compile-time information such as the profile (release/debug) and the target triple.
+#[derive(Default)]
 pub struct CompileTimeInformation {}
-
-impl Default for CompileTimeInformation {
-    fn default() -> Self {
-        Self {}
-    }
-}
 
 impl Collector for CompileTimeInformation {
     fn description(&self) -> &str {
@@ -121,13 +111,8 @@ impl Collector for CompileTimeInformation {
 }
 
 /// The full command-line: executable name and arguments to the program.
+#[derive(Default)]
 pub struct CommandLine {}
-
-impl Default for CommandLine {
-    fn default() -> Self {
-        Self {}
-    }
-}
 
 impl Collector for CommandLine {
     fn description(&self) -> &str {
@@ -151,14 +136,8 @@ impl Collector for CommandLine {
 
 /// The operating system (type and version).
 #[cfg(feature = "collector_operating_system")]
+#[derive(Default)]
 pub struct OperatingSystem {}
-
-#[cfg(feature = "collector_operating_system")]
-impl Default for OperatingSystem {
-    fn default() -> Self {
-        Self {}
-    }
-}
 
 #[cfg(feature = "collector_operating_system")]
 impl Collector for OperatingSystem {
@@ -329,11 +308,10 @@ impl<'a> Collector for CommandOutput<'a> {
 
         result.trim_end_inplace();
 
-        let mut concat = vec![];
-        concat.push(ReportEntry::Code(Code {
+        let mut concat = vec![ReportEntry::Code(Code {
             language: None,
             code: result,
-        }));
+        })];
 
         if !output.status.success() {
             concat.push(ReportEntry::Text(format!(
