@@ -1,6 +1,6 @@
 use std::fs::{self, DirEntry};
 use std::io::ErrorKind;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 
 use crate::{report::ReportEntry, Collector, CrateInfo, Result};
 
@@ -27,11 +27,11 @@ pub struct DirectoryEntries {
     path: PathBuf,
 }
 
-impl DirectoryEntries {
-    pub fn new(title: impl Into<String>, path: impl Into<PathBuf>) -> Self {
+impl<'a> DirectoryEntries {
+    pub fn new<P: AsRef<Path>>(title: &'a str, path: P) -> Self {
         Self {
             title: title.into(),
-            path: path.into(),
+            path: path.as_ref().to_path_buf(),
         }
     }
 }
