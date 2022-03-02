@@ -84,8 +84,11 @@ fn dir_entry_to_report_entry(dir_entry: DirEntry) -> String {
             text.push_str(&format!(", {} bytes", metadata.len()));
         } else if metadata.is_dir() {
             text.push(std::path::MAIN_SEPARATOR);
-        } else if metadata.is_symlink() {
-            text.push('@');
+        } else {
+            #[cfg(unix)]
+            if metadata.is_symlink() {
+                text.push('@');
+            }
         }
     }
 

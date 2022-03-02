@@ -87,6 +87,10 @@ fn dir_exists() -> Result<(), std::io::Error> {
         expected = expected.replace("- symlink_to_file.txt@", "");
         expected.pop(); // .replace() does not handle newlines so remove last newline here
     }
+    #[cfg(windows)]
+    {
+        expected = expected.replace("some_dir/", "some_dir\\");
+    }
 
     assert_eq!(expected, actual);
 
