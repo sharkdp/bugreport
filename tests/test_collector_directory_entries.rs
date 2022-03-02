@@ -53,19 +53,12 @@ fn dir_exists() -> Result<(), std::io::Error> {
     // Put a file in the dir
     let mut some_file = PathBuf::from(dir_path);
     some_file.push("file.txt");
-    std::fs::write(&some_file, "This is a file")?;
+    std::fs::write(some_file, "This is a file")?;
 
     // Put a dir in the dir
     let mut some_dir = PathBuf::from(dir_path);
     some_dir.push("some_dir");
     std::fs::create_dir(some_dir)?;
-
-    #[cfg(unix)]
-    {
-        let mut some_symlink = PathBuf::from(dir_path);
-        some_symlink.push("symlink_to_file.txt");
-        std::os::unix::fs::symlink(&some_file, some_symlink)?;
-    }
 
     let actual = bugreport!()
         .info(DirectoryEntries::new("File and dir", dir_path))
@@ -77,16 +70,10 @@ fn dir_exists() -> Result<(), std::io::Error> {
 
 - file.txt, 14 bytes
 - some_dir/
-- symlink_to_file.txt@
 
 ",
     );
 
-    #[cfg(not(unix))]
-    {
-        expected = expected.replace("- symlink_to_file.txt@", "");
-        expected.pop(); // .replace() does not handle newlines so remove last newline here
-    }
     #[cfg(windows)]
     {
         expected = expected.replace("some_dir/", "some_dir\\");
