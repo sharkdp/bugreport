@@ -10,7 +10,7 @@ use super::CollectionError;
 ///
 /// Limitations:
 /// * Is not recursive
-/// * Does not follow symbolic links
+/// * Does not handle symbolic links
 /// * Only sizes of files are printed and not e.g. time of last modification
 ///
 /// # Example
@@ -20,7 +20,6 @@ use super::CollectionError;
 ///
 /// - file.txt, 14 bytes
 /// - some_dir/
-/// - symlink_to_file.txt@
 ///
 /// ```
 pub struct DirectoryEntries {
@@ -84,11 +83,6 @@ fn dir_entry_to_report_entry(dir_entry: DirEntry) -> String {
             text.push_str(&format!(", {} bytes", metadata.len()));
         } else if metadata.is_dir() {
             text.push(std::path::MAIN_SEPARATOR);
-        } else {
-            #[cfg(unix)]
-            if metadata.is_symlink() {
-                text.push('@');
-            }
         }
     }
 
