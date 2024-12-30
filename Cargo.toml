@@ -19,7 +19,7 @@ version = "0.5.0"
 [features]
 default = ["collector_operating_system", "git_hash", "format_markdown"]
 
-collector_operating_system = ["sys-info"]
+collector_operating_system = ["dep:sysinfo"]
 
 git_hash = ["git-version"]
 
@@ -27,7 +27,7 @@ format_markdown = []
 format_plaintext = []
 
 [dependencies]
-sys-info = { version = "0.9", optional = true }
+sysinfo = { version = "0.33.1", optional = true }
 git-version = { version = "0.3", optional = true }
 shell-escape = "0.1"
 
