@@ -1,3 +1,4 @@
+use std::fmt::Write;
 use std::fs::{self, DirEntry};
 use std::io::ErrorKind;
 use std::path::{Path, PathBuf};
@@ -80,7 +81,7 @@ fn dir_entry_to_report_entry(dir_entry: DirEntry) -> String {
 
     if let Ok(metadata) = dir_entry.metadata() {
         if metadata.is_file() {
-            text.push_str(&format!(", {} bytes", metadata.len()));
+            let _ = write!(text, ", {} bytes", metadata.len());
         } else if metadata.is_dir() {
             text.push(std::path::MAIN_SEPARATOR);
         }

@@ -2,6 +2,7 @@
 
 use std::borrow::Cow;
 use std::ffi::{OsStr, OsString};
+use std::fmt::Write;
 use std::fs;
 use std::path::{Path, PathBuf};
 use std::process::Command;
@@ -219,12 +220,13 @@ impl Collector for EnvironmentVariables {
         let mut result = String::new();
 
         for var in &self.list {
-            let value = std::env::var_os(&var).map(|value| value.to_string_lossy().into_owned());
+            let value = std::env::var_os(var).map(|value| value.to_string_lossy().into_owned());
             let value: Option<String> =
                 value.map(|v| shell_escape::escape(Cow::Borrowed(&v)).into());
 
-            result += &format!(
-                "{}={}\n",
+            let _ = writeln!(
+                result,
+                "{}={}",
                 var.to_string_lossy(),
                 value.unwrap_or_else(|| "<not set>".into())
             );
