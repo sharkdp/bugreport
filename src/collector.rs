@@ -147,54 +147,9 @@ impl Collector for OperatingSystem {
     }
 
     fn collect(&mut self, _: &CrateInfo) -> Result<ReportEntry> {
-        use std::ops::Deref;
-        use sys_info::{os_release, os_type};
-
-        let os_type = os_type()
-            .map_err(|_| CollectionError::CouldNotRetrieve("Operating system type".into()))?;
-        let os_release = os_release();
-        let os_release = os_release
-            .as_ref()
-            .map(|t| t.deref())
-            .unwrap_or("(unknown version)");
-
-        #[cfg(target_os = "macos")]
-        return Ok(ReportEntry::Text(format!(
-            "{} ({} {})",
-            macos_info_string(),
-            os_type,
-            os_release
-        )));
-
-        #[cfg(not(target_os = "macos"))]
-        Ok(ReportEntry::Text(format!("{} {}", os_type, os_release)))
-    }
-}
-
-#[cfg(all(feature = "collector_operating_system", target_os = "macos"))]
-fn macos_info() -> Result<(String, String)> {
-    fn sw_vers(arg: &str) -> Result<String> {
-        let stdout = Command::new("sw_vers")
-            .arg(arg)
-            .output()
-            .map_err(|err| CollectionError::CouldNotRetrieve(err.to_string()))?
-            .stdout;
-
-        Ok(String::from_utf8_lossy(&stdout).trim().to_owned())
-    }
-
-    let macos_name = sw_vers("-productName")?;
-    let macos_version = sw_vers("-productVersion")?;
-
-    Ok((macos_name, macos_version))
-}
-
-#[cfg(all(feature = "collector_operating_system", target_os = "macos"))]
-fn macos_info_string() -> String {
-    if let Ok((name, version)) = macos_info() {
-        format!("{} {}", name, version)
-    } else {
-        "Unknown".to_owned()
+        Ok(ReportEntry::Text(
+            sysinfo::System::long_os_version().unwrap_or_else(|| "Unknown".to_owned()),
+        ))
     }
 }
 

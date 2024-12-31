@@ -4,7 +4,7 @@ bugreport 0.4.0 (4687617)
 
 #### Operating system
 
-Linux 5.11.14-arch1-1
+Linux (Ubuntu 24.04)
 
 #### Command-line
 
@@ -37,5 +37,3 @@ Python 3.9.3
 - Endian: little
 - CPU features: fxsr,sse,sse2
 - Host: x86_64-unknown-linux-gnu
-
-
