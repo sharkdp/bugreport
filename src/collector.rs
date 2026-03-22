@@ -122,10 +122,15 @@ impl Collector for CommandLine {
 
     fn collect(&mut self, _: &CrateInfo) -> Result<ReportEntry> {
         let mut result = String::new();
+        let mut past_first = false;
 
         for arg in std::env::args_os() {
+            if past_first {
+                result += " ";
+            } else {
+                past_first = true;
+            }
             result += &shell_escape::escape(arg.to_string_lossy());
-            result += " ";
         }
 
         Ok(ReportEntry::Code(Code {
@@ -238,10 +243,9 @@ impl Collector for CommandOutput<'_> {
 
         result += "> ";
         result += &self.cmd.to_string_lossy();
-        result += " ";
         for arg in &self.cmd_args {
-            result += &shell_escape::escape(arg.to_string_lossy());
             result += " ";
+            result += &shell_escape::escape(arg.to_string_lossy());
         }
 
         result += "\n";
