@@ -88,7 +88,7 @@ fn dir_exists() -> Result<(), std::io::Error> {
 fn new() {
     DirectoryEntries::new("a", "/a");
     // Not possible yet: DirectoryEntries::new(String::from("b"), PathBuf::from("/b"));
-    DirectoryEntries::new(&String::from("c"), &PathBuf::from("/c"));
+    DirectoryEntries::new(&String::from("c"), PathBuf::from("/c"));
     new_with_title_from_local_variable();
 }
 

@@ -4,17 +4,12 @@ description = "Collect system and environment information for bug reports"
 categories = ["command-line-interface"]
 homepage = "https://github.com/sharkdp/bugreport"
 repository = "https://github.com/sharkdp/bugreport"
-keywords = [
-    "bugreport",
-    "diagnostics",
-    "cross-platform",
-    "cli",
-    "terminal"
-]
+keywords = ["bugreport", "diagnostics", "cross-platform", "cli", "terminal"]
 license = "MIT/Apache-2.0"
 authors = ["David Peter <mail@david-peter.de>"]
-edition = "2018"
+edition = "2024"
 version = "0.5.1"
+rust-version = "1.85"
 
 [features]
 default = ["collector_operating_system", "git_hash", "format_markdown"]

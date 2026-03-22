@@ -228,7 +228,7 @@ impl<'a> CommandOutput<'a> {
     }
 }
 
-impl<'a> Collector for CommandOutput<'a> {
+impl Collector for CommandOutput<'_> {
     fn description(&self) -> &str {
         self.title
     }
@@ -306,7 +306,7 @@ impl<'a> FileContent<'a> {
     }
 }
 
-impl<'a> Collector for FileContent<'a> {
+impl Collector for FileContent<'_> {
     fn description(&self) -> &str {
         self.title
     }

@@ -29,7 +29,7 @@ pub(crate) struct Report<'a> {
     pub(crate) sections: Vec<ReportSection<'a>>,
 }
 
-impl<'a> Report<'a> {
+impl Report<'_> {
     pub fn format_as(&self, format: &mut impl Format) -> String {
         let mut result = String::new();
         for section in &self.sections {

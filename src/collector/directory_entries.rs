@@ -3,7 +3,7 @@ use std::fs::{self, DirEntry};
 use std::io::ErrorKind;
 use std::path::{Path, PathBuf};
 
-use crate::{report::ReportEntry, Collector, CrateInfo, Result};
+use crate::{Collector, CrateInfo, Result, report::ReportEntry};
 
 use super::CollectionError;
 
@@ -28,8 +28,8 @@ pub struct DirectoryEntries {
     path: PathBuf,
 }
 
-impl<'a> DirectoryEntries {
-    pub fn new<P: AsRef<Path>>(title: &'a str, path: P) -> Self {
+impl DirectoryEntries {
+    pub fn new<P: AsRef<Path>>(title: &str, path: P) -> Self {
         Self {
             title: title.into(),
             path: path.as_ref().to_path_buf(),

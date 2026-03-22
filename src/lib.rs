@@ -68,7 +68,7 @@ impl<'a> BugReport<'a> {
         self
     }
 
-    fn generate(&mut self) -> Report {
+    fn generate(&mut self) -> Report<'_> {
         let mut sections = vec![];
 
         for collector in &mut self.collectors {
@@ -141,7 +141,9 @@ mod tests {
         use crate::collector::*;
         use crate::format::Markdown;
 
-        std::env::set_var("BUGREPORT_TEST", "42");
+        unsafe {
+            std::env::set_var("BUGREPORT_TEST", "42");
+        }
 
         let report = BugReport::from_name_and_version("dummy", "0.1")
             .info(EnvironmentVariables::list(&["BUGREPORT_TEST"]))
